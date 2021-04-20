@@ -5,7 +5,12 @@ import "@azure/core-paging";
 
 import { getDefaultProxySettings, isNode, TokenCredential } from "@azure/core-http";
 import { PagedAsyncIterableIterator } from "@azure/core-paging";
-import { BlobServiceClient } from "@azure/storage-blob";
+import {
+  BlobServiceClient,
+  ServiceGetPropertiesOptions,
+  ServiceSetPropertiesOptions,
+  ServiceSetPropertiesResponse
+} from "@azure/storage-blob";
 
 import { AnonymousCredential } from "./credentials/AnonymousCredential";
 import { StorageSharedKeyCredential } from "./credentials/StorageSharedKeyCredential";
@@ -34,6 +39,7 @@ import { SpanStatusCode } from "@azure/core-tracing";
 import { AccountSASPermissions } from "./sas/AccountSASPermissions";
 import { generateAccountSASQueryParameters } from "./sas/AccountSASSignatureValues";
 import { AccountSASServices } from "./sas/AccountSASServices";
+import { DataLakeServiceGetPropertiesResponse, DataLakeServiceProperties } from ".";
 
 /**
  * DataLakeServiceClient allows you to manipulate Azure
@@ -426,5 +432,38 @@ export class DataLakeServiceClient extends StorageClient {
     } finally {
       span.end();
     }
+  }
+
+  /**
+   * Gets the properties of a storage account’s Blob service, including properties
+   * for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
+   * @see https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties
+   *
+   * @param options - Options to the Service Get Properties operation.
+   * @returns Response data for the Service Get Properties operation.
+   */
+  public async getProperties(
+    options: ServiceGetPropertiesOptions = {}
+  ): Promise<DataLakeServiceGetPropertiesResponse> {
+    options.abortSignal;
+    throw String;
+  }
+
+  /**
+   * Sets properties for a storage account’s Blob service endpoint, including properties
+   * for Storage Analytics, CORS (Cross-Origin Resource Sharing) rules and soft delete settings.
+   * @see https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties
+   *
+   * @param properties -
+   * @param options - Options to the Service Set Properties operation.
+   * @returns Response data for the Service Set Properties operation.
+   */
+  public setProperties(
+    properties: DataLakeServiceProperties,
+    options: ServiceSetPropertiesOptions = {}
+  ): Promise<ServiceSetPropertiesResponse> {
+    properties.defaultServiceVersion;
+    options.abortSignal;
+    throw String;
   }
 }

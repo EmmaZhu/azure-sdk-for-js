@@ -8,6 +8,7 @@ import { AbortSignalLike } from '@azure/abort-controller';
 import { BaseRequestPolicy } from '@azure/core-http';
 import { BlobLeaseClient } from '@azure/storage-blob';
 import { BlobQueryArrowConfiguration } from '@azure/storage-blob';
+import { BlobServiceProperties } from '@azure/storage-blob';
 import { ContainerRenameResponse } from '@azure/storage-blob';
 import { ContainerUndeleteResponse } from '@azure/storage-blob';
 import * as coreHttp from '@azure/core-http';
@@ -33,8 +34,12 @@ import { RequestPolicyFactory } from '@azure/core-http';
 import { RequestPolicyOptions } from '@azure/core-http';
 import { RestError } from '@azure/core-http';
 import { ServiceClientOptions } from '@azure/core-http';
+import { ServiceGetPropertiesHeaders } from '@azure/storage-blob';
+import { ServiceGetPropertiesOptions } from '@azure/storage-blob';
 import { ServiceListContainersSegmentResponse } from '@azure/storage-blob';
 import { ServiceRenameContainerOptions } from '@azure/storage-blob';
+import { ServiceSetPropertiesOptions } from '@azure/storage-blob';
+import { ServiceSetPropertiesResponse } from '@azure/storage-blob';
 import { TokenCredential } from '@azure/core-http';
 import { TransferProgressEvent } from '@azure/core-http';
 import { UserAgentOptions } from '@azure/core-http';
@@ -178,6 +183,25 @@ export class DataLakeAclChangeFailedError extends Error {
 }
 
 // @public
+export interface DataLakeAnalyticsLogging {
+    deleteProperty: boolean;
+    read: boolean;
+    // (undocumented)
+    retentionPolicy: DataLakeRetentionPolicy;
+    version: string;
+    write: boolean;
+}
+
+// @public
+export interface DataLakeCorsRule {
+    allowedHeaders: string;
+    allowedMethods: string;
+    allowedOrigins: string;
+    exposedHeaders: string;
+    maxAgeInSeconds: number;
+}
+
+// @public
 export class DataLakeDirectoryClient extends DataLakePathClient {
     create(resourceType: PathResourceTypeModel, options?: PathCreateOptions): Promise<PathCreateResponse>;
     create(options?: DirectoryCreateOptions): Promise<DirectoryCreateResponse>;
@@ -227,10 +251,12 @@ export class DataLakeFileSystemClient extends StorageClient {
     getDirectoryClient(directoryName: string): DataLakeDirectoryClient;
     getFileClient(fileName: string): DataLakeFileClient;
     getProperties(options?: FileSystemGetPropertiesOptions): Promise<FileSystemGetPropertiesResponse>;
+    listDeletedPaths(options?: ListDeletedPathsOptions): PagedAsyncIterableIterator<DeletedPath, FileSystemListDeletedPathsResponse>;
     listPaths(options?: ListPathsOptions): PagedAsyncIterableIterator<Path, FileSystemListPathsResponse>;
     get name(): string;
     setAccessPolicy(access?: PublicAccessType, fileSystemAcl?: SignedIdentifier<AccessPolicy>[], options?: FileSystemSetAccessPolicyOptions): Promise<FileSystemSetAccessPolicyResponse>;
     setMetadata(metadata?: Metadata, options?: FileSystemSetMetadataOptions): Promise<FileSystemSetMetadataResponse>;
+    undeletePath(deletedPath: string, deletionId: string, options: FileSystemUndeletePathOption): Promise<FileSystemUndeletePathResponse>;
 }
 
 // @public (undocumented)
@@ -250,6 +276,15 @@ export class DataLakeLeaseClient {
     renewLease(options?: LeaseOperationOptions): Promise<Lease>;
     // (undocumented)
     get url(): string;
+}
+
+// @public
+export interface DataLakeMetrics {
+    enabled: boolean;
+    includeAPIs?: boolean;
+    // (undocumented)
+    retentionPolicy?: DataLakeRetentionPolicy;
+    version?: string;
 }
 
 // @public
@@ -281,6 +316,12 @@ export class DataLakePathClient extends StorageClient {
 
 // @public (undocumented)
 export interface DataLakeRequestConditions extends ModifiedAccessConditions, LeaseAccessConditions {
+}
+
+// @public
+export interface DataLakeRetentionPolicy {
+    days?: number;
+    enabled: boolean;
 }
 
 // @public
@@ -329,12 +370,55 @@ export class DataLakeServiceClient extends StorageClient {
     static fromConnectionString(connectionString: string, options?: StoragePipelineOptions): DataLakeServiceClient;
     generateAccountSasUrl(expiresOn?: Date, permissions?: AccountSASPermissions, resourceTypes?: string, options?: ServiceGenerateAccountSasUrlOptions): string;
     getFileSystemClient(fileSystemName: string): DataLakeFileSystemClient;
+    getProperties(options?: ServiceGetPropertiesOptions): Promise<DataLakeServiceGetPropertiesResponse>;
     getUserDelegationKey(startsOn: Date, expiresOn: Date, options?: ServiceGetUserDelegationKeyOptions): Promise<ServiceGetUserDelegationKeyResponse>;
     listFileSystems(options?: ServiceListFileSystemsOptions): PagedAsyncIterableIterator<FileSystemItem, ServiceListFileSystemsSegmentResponse>;
+    setProperties(properties: DataLakeServiceProperties, options?: ServiceSetPropertiesOptions): Promise<ServiceSetPropertiesResponse>;
     undeleteFileSystem(deletedFileSystemName: string, deleteFileSystemVersion: string, options?: ServiceUndeleteFileSystemOptions): Promise<{
         fileSystemClient: DataLakeFileSystemClient;
         fileSystemUndeleteResponse: FileSystemUndeleteResponse;
     }>;
+}
+
+// @public
+export type DataLakeServiceGetPropertiesResponse = DataLakeServiceProperties & ServiceGetPropertiesHeaders & {
+    _response: coreHttp.HttpResponse & {
+        parsedHeaders: ServiceGetPropertiesHeaders;
+        bodyAsText: string;
+        parsedBody: BlobServiceProperties;
+    };
+};
+
+// @public
+export interface DataLakeServiceProperties {
+    // (undocumented)
+    analyticsLogging?: DataLakeAnalyticsLogging;
+    cors?: DataLakeCorsRule[];
+    defaultServiceVersion?: string;
+    // (undocumented)
+    deleteRetentionPolicy?: DataLakeRetentionPolicy;
+    // (undocumented)
+    hourMetrics?: DataLakeMetrics;
+    // (undocumented)
+    minuteMetrics?: DataLakeMetrics;
+}
+
+// @public (undocumented)
+export interface DeletedPath {
+    // (undocumented)
+    deletedOn?: Date;
+    // (undocumented)
+    deletionId?: string;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    remainingRetentionDays?: number;
+}
+
+// @public (undocumented)
+export interface DeletedPathList {
+    // (undocumented)
+    pathItems?: DeletedPath[];
 }
 
 export { deserializationPolicy }
@@ -784,6 +868,26 @@ export interface FileSystemItem {
 }
 
 // @public
+export interface FileSystemListBlobHierarchySegmentHeaders {
+    clientRequestId?: string;
+    contentType?: string;
+    date?: Date;
+    errorCode?: string;
+    requestId?: string;
+    version?: string;
+}
+
+// @public (undocumented)
+export type FileSystemListDeletedPathsResponse = DeletedPathList & FileSystemListBlobHierarchySegmentHeaders & {
+    _response: HttpResponse & {
+        parsedHeaders: FileSystemListBlobHierarchySegmentHeaders;
+        bodyAsText: string;
+        parsedBody: ListBlobsHierarchySegmentResponse;
+    };
+    continuation?: string;
+};
+
+// @public
 export interface FileSystemListPathsHeaders {
     continuation?: string;
     date?: Date;
@@ -908,6 +1012,23 @@ export type FileSystemSetMetadataResponse = FileSystemSetMetadataHeaders & {
     };
 };
 
+// @public (undocumented)
+export interface FileSystemUndeletePathOption extends CommonOptions {
+    // (undocumented)
+    abortSignal?: AbortSignalLike;
+}
+
+// Warning: (ae-forgotten-export) The symbol "PathUndeleteHeaders" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type FileSystemUndeletePathResponse = DataLakePathClient & PathUndeleteHeaders & {
+    _response: HttpResponse & {
+        parsedHeaders: PathUndeleteHeaders;
+        bodyAsText: string;
+        parsedBody: PathListModel;
+    };
+};
+
 // @public
 export type FileSystemUndeleteResponse = ContainerUndeleteResponse;
 
@@ -944,6 +1065,19 @@ export type LeaseStateType = "available" | "leased" | "expired" | "breaking" | "
 
 // @public (undocumented)
 export type LeaseStatusType = "locked" | "unlocked";
+
+// @public (undocumented)
+export interface ListDeletedPathsOptions extends CommonOptions {
+    // (undocumented)
+    abortSignal?: AbortSignalLike;
+    path?: string;
+}
+
+// @public (undocumented)
+export interface ListDeletedPathsSegmentOptions extends ListPathsOptions {
+    // (undocumented)
+    maxResults?: number;
+}
 
 // @public (undocumented)
 export interface ListFileSystemsSegmentResponse {
@@ -1143,6 +1277,7 @@ export type PathCreateResponse = PathCreateHeaders & {
 export interface PathDeleteHeaders {
     continuation?: string;
     date?: Date;
+    deletionId?: string;
     errorCode?: string;
     requestId?: string;
     version?: string;
@@ -1896,6 +2031,10 @@ export { UserDelegationKeyModel }
 
 export { WebResource }
 
+
+// Warnings were encountered during analysis:
+//
+// src/models.ts:508:7 - (ae-forgotten-export) The symbol "ListBlobsHierarchySegmentResponse" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

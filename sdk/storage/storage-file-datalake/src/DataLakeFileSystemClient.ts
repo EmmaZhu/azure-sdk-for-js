@@ -33,7 +33,12 @@ import {
   FileSystemListPathsResponse,
   FileSystemCreateIfNotExistsResponse,
   FileSystemDeleteIfExistsResponse,
-  FileSystemGenerateSasUrlOptions
+  FileSystemGenerateSasUrlOptions,
+  FileSystemListDeletedPathsResponse,
+  ListDeletedPathsOptions,
+  DeletedPath,
+  FileSystemUndeletePathResponse,
+  FileSystemUndeletePathOption
 } from "./models";
 import { newPipeline, Pipeline, StoragePipelineOptions } from "./Pipeline";
 import { StorageClient } from "./StorageClient";
@@ -599,6 +604,117 @@ export class DataLakeFileSystemClient extends StorageClient {
     } finally {
       span.end();
     }
+  }
+
+  /**
+   * Returns an async iterable iterator to list all the paths (directories and files)
+   * under the specified file system.
+   *
+   * .byPage() returns an async iterable iterator to list the paths in pages.
+   *
+   * Example using `for await` syntax:
+   *
+   * ```js
+   * // Get the fileSystemClient before you run these snippets,
+   * // Can be obtained from `serviceClient.getFileSystemClient("<your-filesystem-name>");`
+   * let i = 1;
+   * for await (const deletePath of fileSystemClient.listDeletedPaths()) {
+   *   console.log(`Path ${i++}: ${deletePath.name}`);
+   * }
+   * ```
+   *
+   * Example using `iter.next()`:
+   *
+   * ```js
+   * let i = 1;
+   * let iter = fileSystemClient.listDeletedPaths();
+   * let deletedPathItem = await iter.next();
+   * while (!deletedPathItem.done) {
+   *   console.log(`Path ${i++}: ${deletedPathItem.value.name}`);
+   *   pathItem = await iter.next();
+   * }
+   * ```
+   *
+   * Example using `byPage()`:
+   *
+   * ```js
+   * // passing optional maxPageSize in the page settings
+   * let i = 1;
+   * for await (const response of fileSystemClient.listDeletedPaths().byPage({ maxPageSize: 20 })) {
+   *   for (const deletePath of response.pathItems) {
+   *     console.log(`Path ${i++}: ${deletePath.name}`);
+   *   }
+   * }
+   * ```
+   *
+   * Example using paging with a marker:
+   *
+   * ```js
+   * let i = 1;
+   * let iterator = fileSystemClient.listDeletedPaths().byPage({ maxPageSize: 2 });
+   * let response = (await iterator.next()).value;
+   *
+   * // Prints 2 path names
+   * for (const path of response.pathItems) {
+   *   console.log(`Path ${i++}: ${path.name}}`);
+   * }
+   *
+   * // Gets next marker
+   * let marker = response.continuationToken;
+   *
+   * // Passing next marker as continuationToken
+   *
+   * iterator = fileSystemClient.listDeletedPaths().byPage({ continuationToken: marker, maxPageSize: 10 });
+   * response = (await iterator.next()).value;
+   *
+   * // Prints 10 path names
+   * for (const deletePath of response.deletedPathItems) {
+   *   console.log(`Path ${i++}: ${deletePath.name}`);
+   * }
+   * ```
+   *
+   * @see https://docs.microsoft.com/rest/api/storageservices/list-blobs
+   *
+   * @param options - Optional. Options when listing deleted paths.
+   */
+  public listDeletedPaths(
+    options: ListDeletedPathsOptions = {}
+  ): PagedAsyncIterableIterator<DeletedPath, FileSystemListDeletedPathsResponse> {
+    const iter = this.listItems(options);
+    return {
+      next() {
+        return iter.next();
+      },
+      [Symbol.asyncIterator]() {
+        return this;
+      },
+      byPage: (settings: PageSettings = {}) => {
+        settings.continuationToken;
+        throw String;
+      }
+    };
+  }
+
+  /**
+   * Restores a soft deleted path.
+   *
+   * @see https://docs.microsoft.com/en-us/rest/api/storageservices/undelete-blob
+   *
+   * @param deletedPath - Required.  The path of the deleted path.
+   *
+   * @param deletionId - Required.  The deletion ID associated with the soft deleted path.
+   *
+   */
+
+  public undeletePath(
+    deletedPath: string,
+    deletionId: string,
+    options: FileSystemUndeletePathOption
+  ): Promise<FileSystemUndeletePathResponse> {
+    deletedPath;
+    deletionId;
+    options.abortSignal;
+    throw String;
   }
 
   /**
