@@ -10,6 +10,7 @@ import {
   bodyToString,
   getBSU,
   getSASConnectionStringFromEnvironment,
+  isBrowser,
   recorderEnvSetup
 } from "./utils";
 
@@ -83,6 +84,38 @@ describe("AppendBlobClient", () => {
 
     const content = "Hello World!";
     await appendBlobClient.appendBlock(content, content.length);
+
+    const downloadResponse = await appendBlobClient.download(0);
+    assert.equal(await bodyToString(downloadResponse, content.length), content);
+    assert.equal(downloadResponse.contentLength!, content.length);
+  });
+
+  it("appendBlock with Buffer as body and contentLength not correct", async function() {
+    if (isBrowser()) {
+      // Buffer type doesn't work in Browser
+      this.skip();
+    }
+
+    await appendBlobClient.create();
+
+    const content = new Buffer("Hello World!");
+    await appendBlobClient.appendBlock(content, content.length + 1);
+
+    const downloadResponse = await appendBlobClient.download(0);
+    assert.equal(await bodyToString(downloadResponse, content.length), content);
+    assert.equal(downloadResponse.contentLength!, content.length);
+  });
+
+  it("appendBlock with Buffer as body and contentLength not correct", async function() {
+    if (isBrowser()) {
+      // Buffer type doesn't work in Browser
+      this.skip();
+    }
+
+    await appendBlobClient.create();
+
+    const content = new Buffer("Hello World!");
+    await appendBlobClient.appendBlock(content, content.length + 1);
 
     const downloadResponse = await appendBlobClient.download(0);
     assert.equal(await bodyToString(downloadResponse, content.length), content);

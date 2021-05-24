@@ -39,8 +39,16 @@ export class StorageSharedKeyCredentialPolicy extends CredentialPolicy {
   protected signRequest(request: WebResource): WebResource {
     request.headers.set(HeaderConstants.X_MS_DATE, new Date().toUTCString());
 
-    if (request.body && typeof request.body === "string" && request.body.length > 0) {
-      request.headers.set(HeaderConstants.CONTENT_LENGTH, Buffer.byteLength(request.body));
+    if (
+      typeof request.body === "string" ||
+      (request.body as any) instanceof Buffer ||
+      (request.body as any) instanceof DataView ||
+      (request.body as any) instanceof ArrayBuffer
+    ) {
+      const contentLength = Buffer.byteLength(request.body);
+      if (contentLength > 0) {
+        request.headers.set(HeaderConstants.CONTENT_LENGTH, contentLength);
+      }
     }
 
     const stringToSign: string =
