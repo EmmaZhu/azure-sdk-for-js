@@ -747,6 +747,11 @@ export interface CommonGenerateSasUrlOptions {
    * Optional. The content-type header for the SAS.
    */
   contentType?: string;
+
+  /**
+   *  Optional.  Encryption scope to use when sending requests authorized with this SAS URI.
+   */
+  encryptionScope?: string;
 }
 
 /**
