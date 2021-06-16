@@ -516,6 +516,14 @@ export interface ContainerListBlobsOptions extends CommonOptions {
    * Specifies whether blob tags be returned in the response.
    */
   includeTags?: boolean;
+  /**
+   * Specifies whether blob immutability policy be returned in the response.
+   */
+  includeImmutabilityPolicy?: boolean;
+  /**
+   * Specifies whether blob legal hold be returned in the response.
+   */
+  includeLegalHold?: boolean;
 }
 
 /**
@@ -1473,6 +1481,12 @@ export class ContainerClient extends StorageClient {
     if (options.includeTags) {
       include.push("tags");
     }
+    if (options.includeImmutabilityPolicy) {
+      include.push("immutabilitypolicy");
+    }
+    if (options.includeLegalHold) {
+      include.push("legalhold");
+    }
     if (options.prefix === "") {
       options.prefix = undefined;
     }
@@ -1680,6 +1694,12 @@ export class ContainerClient extends StorageClient {
     }
     if (options.includeTags) {
       include.push("tags");
+    }
+    if (options.includeImmutabilityPolicy) {
+      include.push("immutabilitypolicy");
+    }
+    if (options.includeLegalHold) {
+      include.push("legalhold");
     }
     if (options.prefix === "") {
       options.prefix = undefined;
