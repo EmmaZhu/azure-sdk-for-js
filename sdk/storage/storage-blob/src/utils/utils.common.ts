@@ -7,7 +7,8 @@ import { HttpHeaders, isNode, URLBuilder, TokenCredential } from "@azure/core-ht
 import {
   BlobQueryArrowConfiguration,
   BlobQueryCsvTextConfiguration,
-  BlobQueryJsonTextConfiguration
+  BlobQueryJsonTextConfiguration,
+  BlobQueryParquetConfiguration
 } from "../Clients";
 import { QuerySerialization, BlobTags } from "../generated/src/models";
 import { DevelopmentConnectionString, HeaderConstants, URLConstants } from "./constants";
@@ -646,6 +647,7 @@ export function toQuerySerialization(
     | BlobQueryJsonTextConfiguration
     | BlobQueryCsvTextConfiguration
     | BlobQueryArrowConfiguration
+    | BlobQueryParquetConfiguration
 ): QuerySerialization | undefined {
   if (textConfiguration === undefined) {
     return undefined;
@@ -681,6 +683,12 @@ export function toQuerySerialization(
           arrowConfiguration: {
             schema: textConfiguration.schema
           }
+        }
+      };
+    case "parquet":
+      return {
+        format: {
+          type: "parquet"
         }
       };
 

@@ -2912,6 +2912,16 @@ export interface BlobQueryArrowConfiguration {
 }
 
 /**
+ * Options to query blob with Parquet format. Only valid for {@link BlockBlobQueryOptions.inputTextConfiguration}.
+ */
+export interface BlobQueryParquetConfiguration {
+  /**
+   * Kind.
+   */
+  kind: "parquet";
+}
+
+/**
  * Options to configure {@link BlockBlobClient.query} operation.
  */
 export interface BlockBlobQueryOptions extends CommonOptions {
@@ -2923,7 +2933,10 @@ export interface BlockBlobQueryOptions extends CommonOptions {
   /**
    * Configurations for the query input.
    */
-  inputTextConfiguration?: BlobQueryJsonTextConfiguration | BlobQueryCsvTextConfiguration;
+  inputTextConfiguration?:
+    | BlobQueryJsonTextConfiguration
+    | BlobQueryCsvTextConfiguration
+    | BlobQueryParquetConfiguration;
   /**
    * Configurations for the query output.
    */

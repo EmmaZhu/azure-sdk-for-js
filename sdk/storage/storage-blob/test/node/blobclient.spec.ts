@@ -685,4 +685,21 @@ describe("BlobClient Node.js only", () => {
       }
     });
   });
+
+  it.only("query should work with Parquet input configuration", async function() {
+    recorder.skip("node", "Temp file - recorder doesn't support saving the file");
+    const parquetFilePath = "test/resources/parquet.parquet";
+    if (!existsSync(parquetFilePath)) {
+      return;
+    }
+    await blockBlobClient.uploadFile(parquetFilePath);
+
+    const response = await blockBlobClient.query("select * from blobstorage where id < 1;", {
+      inputTextConfiguration: {
+        kind: "parquet"
+      }
+    });
+
+    assert.deepStrictEqual(await bodyToString(response), "0,mdifjt55.ea3,mdifjt55.ea3\n");
+  });
 });
