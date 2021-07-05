@@ -78,7 +78,8 @@ import {
   MatchConditions,
   ModificationConditions,
   ModifiedAccessConditions,
-  BlobQueryArrowField
+  BlobQueryArrowField,
+  HttpAuthorization
 } from "./models";
 import {
   PageBlobGetPageRangesDiffResponse,
@@ -112,6 +113,7 @@ import {
   extractConnectionStringParts,
   generateBlockID,
   getURLParameter,
+  httpAuthorizationToString,
   isIpEndpointStyle,
   parseObjectReplicationRecord,
   setURLParameter,
@@ -586,6 +588,10 @@ export interface BlobSyncCopyFromURLOptions extends CommonOptions {
    * Blob tags.
    */
   tags?: Tags;
+  /**
+   * Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source.
+   */
+  sourceAuthorization?: HttpAuthorization;
 }
 
 /**
@@ -1715,6 +1721,7 @@ export class BlobClient extends StorageClient {
           sourceIfUnmodifiedSince: options.sourceConditions.ifUnmodifiedSince
         },
         sourceContentMD5: options.sourceContentMD5,
+        copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
         blobTagsString: toBlobTagsString(options.tags),
         ...convertTracingToRequestOptionsBase(updatedOptions)
       });
@@ -2301,6 +2308,10 @@ export interface AppendBlobAppendBlockFromURLOptions extends CommonOptions {
    * Storage Services.
    */
   encryptionScope?: string;
+  /**
+   * Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source.
+   */
+  sourceAuthorization?: HttpAuthorization;
 }
 
 /**
@@ -2710,6 +2721,7 @@ export class AppendBlobClient extends BlobClient {
           sourceIfNoneMatch: options.sourceConditions.ifNoneMatch,
           sourceIfUnmodifiedSince: options.sourceConditions.ifUnmodifiedSince
         },
+        copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
         ...convertTracingToRequestOptionsBase(updatedOptions)
@@ -2844,6 +2856,10 @@ export interface BlockBlobSyncUploadFromURLOptions extends CommonOptions {
    * Optional. Conditions to meet for the source Azure Blob.
    */
   sourceConditions?: ModifiedAccessConditions;
+  /**
+   * Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source.
+   */
+  sourceAuthorization?: HttpAuthorization;
 }
 
 /**
@@ -3057,6 +3073,10 @@ export interface BlockBlobStageBlockFromURLOptions extends CommonOptions {
    * Storage Services.
    */
   encryptionScope?: string;
+  /**
+   * Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source.
+   */
+  sourceAuthorization?: HttpAuthorization;
 }
 
 /**
@@ -3617,6 +3637,7 @@ export class BlockBlobClient extends BlobClient {
           sourceIfTags: options.sourceConditions?.tagConditions
         },
         cpkInfo: options.customerProvidedKey,
+        copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
         tier: toAccessTier(options.tier),
         blobTagsString: toBlobTagsString(options.tags),
         ...convertTracingToRequestOptionsBase(updatedOptions)
@@ -3714,6 +3735,7 @@ export class BlockBlobClient extends BlobClient {
         sourceRange: offset === 0 && !count ? undefined : rangeToString({ offset, count }),
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
+        copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
         ...convertTracingToRequestOptionsBase(updatedOptions)
       });
     } catch (e) {
@@ -4462,6 +4484,10 @@ export interface PageBlobUploadPagesFromURLOptions extends CommonOptions {
    * Storage Services.
    */
   encryptionScope?: string;
+  /**
+   * Only Bearer type is supported. Credentials should be a valid OAuth access token to copy source.
+   */
+  sourceAuthorization?: HttpAuthorization;
 }
 
 /**
@@ -4826,6 +4852,7 @@ export class PageBlobClient extends BlobClient {
           },
           cpkInfo: options.customerProvidedKey,
           encryptionScope: options.encryptionScope,
+          copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
           ...convertTracingToRequestOptionsBase(updatedOptions)
         }
       );
