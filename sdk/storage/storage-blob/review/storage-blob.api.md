@@ -140,7 +140,6 @@ export interface AppendBlobAppendBlockFromURLOptions extends CommonOptions {
     conditions?: AppendBlobRequestConditions;
     customerProvidedKey?: CpkInfo;
     encryptionScope?: string;
-    // Warning: (ae-forgotten-export) The symbol "HttpAuthorization" needs to be exported by the entry point index.d.ts
     sourceAuthorization?: HttpAuthorization;
     sourceConditions?: MatchConditions & ModificationConditions;
     sourceContentCrc64?: Uint8Array;
@@ -537,10 +536,6 @@ export interface BlobDownloadHeaders {
     errorCode?: string;
     etag?: string;
     immutabilityPolicyExpiresOn?: Date;
-<<<<<<< HEAD
-=======
-    // Warning: (ae-forgotten-export) The symbol "BlobImmutabilityPolicyMode" needs to be exported by the entry point index.d.ts
->>>>>>> 4ff95296c (Add support for bearer authorization in copying source.)
     immutabilityPolicyMode?: BlobImmutabilityPolicyMode;
     isCurrentVersion?: boolean;
     isSealed?: boolean;
@@ -806,7 +801,6 @@ export interface BlobItemInternal {
     blobTags?: BlobTags;
     // (undocumented)
     deleted: boolean;
-    // (undocumented)
     hasVersionsOnly?: boolean;
     // (undocumented)
     isCurrentVersion?: boolean;
@@ -895,9 +889,7 @@ export interface BlobProperties {
     etag: string;
     // (undocumented)
     expiresOn?: Date;
-    // (undocumented)
     immutabilityPolicyExpiresOn?: Date;
-    // (undocumented)
     immutabilityPolicyMode?: BlobImmutabilityPolicyMode;
     // (undocumented)
     incrementalCopy?: boolean;
@@ -913,7 +905,6 @@ export interface BlobProperties {
     leaseState?: LeaseStateType;
     // (undocumented)
     leaseStatus?: LeaseStatusType;
-    // (undocumented)
     legalHold?: boolean;
     rehydratePriority?: RehydratePriority;
     // (undocumented)
@@ -2156,6 +2147,12 @@ export interface GeoReplication {
 
 // @public
 export type GeoReplicationStatusType = "live" | "bootstrap" | "unavailable";
+
+// @public
+export interface HttpAuthorization {
+    parameter: string;
+    scheme: string;
+}
 
 export { HttpHeaders }
 

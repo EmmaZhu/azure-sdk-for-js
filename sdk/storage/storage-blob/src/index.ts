@@ -33,7 +33,8 @@ export {
   ObjectReplicationRule,
   ObjectReplicationStatus,
   BlobQueryArrowField,
-  BlobQueryArrowFieldType
+  BlobQueryArrowFieldType,
+  HttpAuthorization
 } from "./models";
 export * from "./Pipeline";
 export * from "./policies/AnonymousCredentialPolicy";
