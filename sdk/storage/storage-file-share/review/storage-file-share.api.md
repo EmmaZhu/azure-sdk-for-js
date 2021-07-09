@@ -308,7 +308,14 @@ export type DirectoryGetPropertiesResponse = DirectoryGetPropertiesHeaders & {
 // @public
 export interface DirectoryItem {
     // (undocumented)
+    attributes?: string;
+    // (undocumented)
+    fileId?: string;
+    // (undocumented)
     name: string;
+    // (undocumented)
+    permissionKey?: string;
+    properties?: FileProperty;
 }
 
 // @public
@@ -743,7 +750,13 @@ export interface FileHttpHeaders {
 // @public
 export interface FileItem {
     // (undocumented)
+    attributes?: string;
+    // (undocumented)
+    fileId?: string;
+    // (undocumented)
     name: string;
+    // (undocumented)
+    permissionKey?: string;
     properties: FileProperty;
 }
 
@@ -802,7 +815,19 @@ export interface FileProperties extends FileAndDirectorySetPropertiesCommonOptio
 
 // @public
 export interface FileProperty {
+    // (undocumented)
+    changeTime?: Date;
     contentLength: number;
+    // (undocumented)
+    creationTime?: Date;
+    // (undocumented)
+    etag?: string;
+    // (undocumented)
+    lastAccessTime?: Date;
+    // (undocumented)
+    lastModified?: Date;
+    // (undocumented)
+    lastWriteTime?: Date;
 }
 
 // @public
@@ -971,6 +996,7 @@ export interface FileUploadRangeFromURLHeaders {
 
 // @public
 export interface FileUploadRangeFromURLOptionalParams extends coreHttp.OperationOptions {
+    copySourceAuthorization?: string;
     leaseAccessConditions?: LeaseAccessConditions;
     sourceContentCrc64?: Uint8Array;
     sourceModifiedAccessConditions?: SourceModifiedAccessConditions;
@@ -1099,6 +1125,8 @@ export type LeaseStatusType = "locked" | "unlocked";
 export interface ListFilesAndDirectoriesSegmentResponse {
     // (undocumented)
     continuationToken: string;
+    // (undocumented)
+    directoryId?: string;
     // (undocumented)
     directoryPath: string;
     // (undocumented)

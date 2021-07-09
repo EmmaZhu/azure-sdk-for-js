@@ -12,7 +12,7 @@ enable-xml: true
 generate-metadata: false
 license-header: MICROSOFT_MIT_NO_VERSION
 output-folder: ../src/generated
-input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/storage-dataplane-preview/specification/storage/data-plane/Microsoft.FileStorage/preview/2020-04-08/file.json
+input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/c7e65d6c8db47714c21e41adf2ec60e64afae776/specification/storage/data-plane/Microsoft.FileStorage/preview/2020-10-02/file.json
 model-date-time-as-string: true
 optional-response-headers: true
 v3: true
@@ -27,6 +27,30 @@ package-version: 12.7.0
 
 See the [AutoRest samples](https://github.com/Azure/autorest/tree/master/Samples/3b-custom-transformations)
 for more about how we're customizing things.
+
+### Don't include container or blob in path - we have direct URIs.
+
+```yaml
+directive:
+  - from: swagger-document
+    where: $["x-ms-paths"]
+    transform: >
+      for (const property in $)
+      {
+          if (property.includes('/{shareName}/{directory}/{fileName}'))
+          {
+              $[property]["parameters"] = $[property]["parameters"].filter(function(param) { return (typeof param['$ref'] === "undefined") || (false == param['$ref'].endsWith("#/parameters/ShareName") && false == param['$ref'].endsWith("#/parameters/DirectoryPath") && false == param['$ref'].endsWith("#/parameters/FilePath"))});
+          } 
+          else if (property.includes('/{shareName}/{directory}'))
+          {
+              $[property]["parameters"] = $[property]["parameters"].filter(function(param) { return (typeof param['$ref'] === "undefined") || (false == param['$ref'].endsWith("#/parameters/ShareName") && false == param['$ref'].endsWith("#/parameters/DirectoryPath"))});
+          }
+          else if (property.includes('/{shareName}'))
+          {
+              $[property]["parameters"] = $[property]["parameters"].filter(function(param) { return (typeof param['$ref'] === "undefined") || (false == param['$ref'].endsWith("#/parameters/ShareName"))});
+          }
+      }
+```
 
 ### /?restype=service&comp=properties (StorageServiceProperties renamed to FileServiceProperties)
 
@@ -682,7 +706,7 @@ directive:
 ```yaml
 directive:
   - from: swagger-document
-    where: $["x-ms-paths"]["/{shareName}/{directory}/{fileName}?comp=copy&copyid={CopyId}"]["put"]["responses"]["204"]["headers"]
+    where: $["x-ms-paths"]["/{shareName}/{directory}/{fileName}?comp=copy&copyid"]["put"]["responses"]["204"]["headers"]
     transform: >
       $["x-ms-error-code"] = {};
       $["x-ms-error-code"]["x-ms-client-name"] = "ErrorCode";

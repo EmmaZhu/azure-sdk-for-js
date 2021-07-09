@@ -12,7 +12,7 @@ enable-xml: true
 generate-metadata: false
 license-header: MICROSOFT_MIT_NO_VERSION
 output-folder: ../src/generated
-input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/8c1f9b739165035d9ced32761cebb19125bce233/specification/storage/data-plane/Microsoft.BlobStorage/preview/2020-06-12/blob.json
+input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/c7e65d6c8db47714c21e41adf2ec60e64afae776/specification/storage/data-plane/Microsoft.BlobStorage/preview/2020-10-02/blob.json
 model-date-time-as-string: true
 optional-response-headers: true
 v3: true
@@ -27,6 +27,24 @@ package-version: 12.7.0
 
 See the [AutoRest samples](https://github.com/Azure/autorest/tree/master/Samples/3b-custom-transformations)
 for more about how we're customizing things.
+
+```yaml
+directive:
+  - from: swagger-document
+    where: $["x-ms-paths"]
+    transform: >
+      for (const property in $)
+      {
+          if (property.includes('/{containerName}/{blob}'))
+          {
+              $[property]["parameters"] = $[property]["parameters"].filter(function(param) { return (typeof param['$ref'] === "undefined") || (false == param['$ref'].endsWith("#/parameters/ContainerName") && false == param['$ref'].endsWith("#/parameters/Blob"))});
+          } 
+          else if (property.includes('/{containerName}'))
+          {
+              $[property]["parameters"] = $[property]["parameters"].filter(function(param) { return (typeof param['$ref'] === "undefined") || (false == param['$ref'].endsWith("#/parameters/ContainerName"))});
+          }
+      }
+```
 
 ### /?restype=service&comp=properties (StorageServiceProperties renamed to BlobServiceProperties)
 
@@ -518,6 +536,19 @@ directive:
 directive:
   - from: swagger-document
     where: $["x-ms-paths"]["/{containerName}/{blob}?comp=properties&SetHTTPHeaders"]["put"]["responses"]["200"]["headers"]
+    transform: >
+      $["x-ms-error-code"] = {};
+      $["x-ms-error-code"]["x-ms-client-name"] = "ErrorCode";
+      $["x-ms-error-code"]["type"] = "string";
+      $["x-ms-error-code"]["description"] = "Error Code";
+```
+
+### Add error code to response header - Blob_AbortCopyFromURL
+
+```yaml
+directive:
+  - from: swagger-document
+    where: $["x-ms-paths"]["/{containerName}/{blob}?comp=copy&copyid"]["put"]["responses"]["204"]["headers"]
     transform: >
       $["x-ms-error-code"] = {};
       $["x-ms-error-code"]["x-ms-client-name"] = "ErrorCode";

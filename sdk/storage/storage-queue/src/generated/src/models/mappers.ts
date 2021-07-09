@@ -283,7 +283,8 @@ export const GeoReplication: coreHttp.CompositeMapper = {
         required: true,
         xmlName: "Status",
         type: {
-          name: "String"
+          name: "Enum",
+          allowedValues: ["live", "bootstrap", "unavailable"]
         }
       },
       lastSyncOn: {
@@ -658,16 +659,16 @@ export const ServiceSetPropertiesHeaders: coreHttp.CompositeMapper = {
           name: "String"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -720,16 +721,16 @@ export const ServiceGetPropertiesHeaders: coreHttp.CompositeMapper = {
           name: "String"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -789,16 +790,16 @@ export const ServiceGetStatisticsHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -858,16 +859,16 @@ export const ServiceListQueuesSegmentHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -927,16 +928,16 @@ export const QueueCreateHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -996,16 +997,16 @@ export const QueueDeleteHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1046,6 +1047,7 @@ export const QueueGetPropertiesHeaders: coreHttp.CompositeMapper = {
     modelProperties: {
       metadata: {
         serializedName: "x-ms-meta",
+        xmlName: "x-ms-meta",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
@@ -1080,16 +1082,16 @@ export const QueueGetPropertiesHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1149,16 +1151,16 @@ export const QueueSetMetadataHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1218,16 +1220,16 @@ export const QueueGetAccessPolicyHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1287,16 +1289,16 @@ export const QueueSetAccessPolicyHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1356,16 +1358,16 @@ export const MessagesDequeueHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1425,16 +1427,16 @@ export const MessagesClearHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1494,16 +1496,16 @@ export const MessagesEnqueueHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1563,16 +1565,16 @@ export const MessagesPeekHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1646,16 +1648,16 @@ export const MessageIdUpdateHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
@@ -1715,16 +1717,16 @@ export const MessageIdDeleteHeaders: coreHttp.CompositeMapper = {
           name: "DateTimeRfc1123"
         }
       },
-      clientRequestId: {
-        serializedName: "x-ms-client-request-id",
-        xmlName: "x-ms-client-request-id",
+      errorCode: {
+        serializedName: "x-ms-error-code",
+        xmlName: "x-ms-error-code",
         type: {
           name: "String"
         }
       },
-      errorCode: {
-        serializedName: "x-ms-error-code",
-        xmlName: "x-ms-error-code",
+      clientRequestId: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
         type: {
           name: "String"
         }
