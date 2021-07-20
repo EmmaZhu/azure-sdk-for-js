@@ -15,7 +15,7 @@ import { AbortSignalLike } from "@azure/abort-controller";
 import { SpanStatusCode } from "@azure/core-tracing";
 import { convertTracingToRequestOptionsBase, createSpan } from "./utils/tracing";
 import { HttpResponse, TokenCredential } from "@azure/core-http";
-import { Service, Container } from "./generated/src/operations";
+import { ServiceImpl, ContainerImpl } from "./generated/src/operations";
 import { StorageSharedKeyCredential } from "./credentials/StorageSharedKeyCredential";
 import { AnonymousCredential } from "./credentials/AnonymousCredential";
 import { CommonOptions } from "./StorageClient";
@@ -69,7 +69,7 @@ export declare type BlobBatchSetBlobsAccessTierResponse = BlobBatchSubmitBatchRe
  * @see https://docs.microsoft.com/en-us/rest/api/storageservices/blob-batch
  */
 export class BlobBatchClient {
-  private serviceOrContainerContext: Service | Container;
+  private serviceOrContainerContext: ServiceImpl | ContainerImpl;
 
   /**
    * Creates an instance of BlobBatchClient.
@@ -119,9 +119,9 @@ export class BlobBatchClient {
     const path = getURLPath(url);
     if (path && path !== "/") {
       // Container scoped.
-      this.serviceOrContainerContext = new Container(storageClientContext);
+      this.serviceOrContainerContext = new ContainerImpl(storageClientContext);
     } else {
-      this.serviceOrContainerContext = new Service(storageClientContext);
+      this.serviceOrContainerContext = new ServiceImpl(storageClientContext);
     }
   }
 

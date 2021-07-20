@@ -1047,12 +1047,12 @@ export const QueueGetPropertiesHeaders: coreHttp.CompositeMapper = {
     modelProperties: {
       metadata: {
         serializedName: "x-ms-meta",
+        headerCollectionPrefix: "x-ms-meta-",
         xmlName: "x-ms-meta",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
-        },
-        headerCollectionPrefix: "x-ms-meta-"
+        }
       },
       approximateMessagesCount: {
         serializedName: "x-ms-approximate-messages-count",

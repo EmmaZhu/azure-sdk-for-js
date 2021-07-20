@@ -6,6 +6,7 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
+import { AppendBlob } from "../operationsInterfaces";
 import * as coreHttp from "@azure/core-http";
 import * as Mappers from "../models/mappers";
 import * as Parameters from "../models/parameters";
@@ -22,7 +23,7 @@ import {
 } from "../models";
 
 /** Class representing a AppendBlob. */
-export class AppendBlob {
+export class AppendBlobImpl implements AppendBlob {
   private readonly client: StorageClientContext;
 
   /**
@@ -120,7 +121,6 @@ export class AppendBlob {
 }
 // Operation Specifications
 const xmlSerializer = new coreHttp.Serializer(Mappers, /* isXml */ true);
-const serializer = new coreHttp.Serializer(Mappers, /* isXml */ false);
 
 const createOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",
@@ -203,8 +203,10 @@ const appendBlockOperationSpec: coreHttp.OperationSpec = {
     Parameters.maxSize,
     Parameters.appendPosition
   ],
+  isXML: true,
+  contentType: "application/xml; charset=utf-8",
   mediaType: "binary",
-  serializer
+  serializer: xmlSerializer
 };
 const appendBlockFromUrlOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",

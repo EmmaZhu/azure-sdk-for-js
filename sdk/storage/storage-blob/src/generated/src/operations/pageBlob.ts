@@ -6,6 +6,7 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
+import { PageBlob } from "../operationsInterfaces";
 import * as coreHttp from "@azure/core-http";
 import * as Mappers from "../models/mappers";
 import * as Parameters from "../models/parameters";
@@ -33,7 +34,7 @@ import {
 } from "../models";
 
 /** Class representing a PageBlob. */
-export class PageBlob {
+export class PageBlobImpl implements PageBlob {
   private readonly client: StorageClientContext;
 
   /**
@@ -242,7 +243,6 @@ export class PageBlob {
 }
 // Operation Specifications
 const xmlSerializer = new coreHttp.Serializer(Mappers, /* isXml */ true);
-const serializer = new coreHttp.Serializer(Mappers, /* isXml */ false);
 
 const createOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",
@@ -331,8 +331,10 @@ const uploadPagesOperationSpec: coreHttp.OperationSpec = {
     Parameters.ifSequenceNumberLessThan,
     Parameters.ifSequenceNumberEqualTo
   ],
+  isXML: true,
+  contentType: "application/xml; charset=utf-8",
   mediaType: "binary",
-  serializer
+  serializer: xmlSerializer
 };
 const clearPagesOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",

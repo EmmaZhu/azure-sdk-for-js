@@ -378,7 +378,7 @@ export interface QueryFormat {
   /** Groups the settings used for formatting the response if the response should be Arrow formatted. */
   arrowConfiguration?: ArrowConfiguration;
   /** Any object */
-  parquetTextConfiguration?: any;
+  parquetTextConfiguration?: Record<string, unknown>;
 }
 
 /** Groups the settings used for interpreting the blob data if the blob is delimited text formatted. */
@@ -2306,7 +2306,7 @@ export interface CpkInfo {
   encryptionKey?: string;
   /** The SHA-256 hash of the provided encryption key. Must be provided if the x-ms-encryption-key header is provided. */
   encryptionKeySha256?: string;
-  /** The algorithm used to produce the encryption key hash. Currently, the only accepted value is \"AES256\". Must be provided if the x-ms-encryption-key header is provided. */
+  /** The algorithm used to produce the encryption key hash. Currently, the only accepted value is "AES256". Must be provided if the x-ms-encryption-key header is provided. */
   encryptionAlgorithm?: EncryptionAlgorithmType;
 }
 
@@ -2359,7 +2359,7 @@ export interface AppendPositionAccessConditions {
 }
 
 /** Known values of {@link BlobExpiryOptions} that the service accepts. */
-export const enum KnownBlobExpiryOptions {
+export enum KnownBlobExpiryOptions {
   NeverExpire = "NeverExpire",
   RelativeToCreation = "RelativeToCreation",
   RelativeToNow = "RelativeToNow",
@@ -2370,7 +2370,7 @@ export const enum KnownBlobExpiryOptions {
  * Defines values for BlobExpiryOptions. \
  * {@link KnownBlobExpiryOptions} can be used interchangeably with BlobExpiryOptions,
  *  this enum contains the known values that the service supports.
- * ### Know values supported by the service
+ * ### Known values supported by the service
  * **NeverExpire** \
  * **RelativeToCreation** \
  * **RelativeToNow** \
@@ -2379,7 +2379,7 @@ export const enum KnownBlobExpiryOptions {
 export type BlobExpiryOptions = string;
 
 /** Known values of {@link StorageErrorCode} that the service accepts. */
-export const enum KnownStorageErrorCode {
+export enum KnownStorageErrorCode {
   AccountAlreadyExists = "AccountAlreadyExists",
   AccountBeingCreated = "AccountBeingCreated",
   AccountIsDisabled = "AccountIsDisabled",
@@ -2499,7 +2499,7 @@ export const enum KnownStorageErrorCode {
  * Defines values for StorageErrorCode. \
  * {@link KnownStorageErrorCode} can be used interchangeably with StorageErrorCode,
  *  this enum contains the known values that the service supports.
- * ### Know values supported by the service
+ * ### Known values supported by the service
  * **AccountAlreadyExists** \
  * **AccountBeingCreated** \
  * **AccountIsDisabled** \
@@ -2693,11 +2693,12 @@ export type BlockListType = "committed" | "uncommitted" | "all";
 /** Defines values for SequenceNumberActionType. */
 export type SequenceNumberActionType = "max" | "update" | "increment";
 /** Defines values for QueryFormatType. */
-export type QueryFormatType = "delimited" | "json" | "arrow" | "parquet";
+export type QueryFormatType = "delimited" | "json" | "arrow" | "parquet";	
 /** Defines values for SyncCopyStatusType. */
 export type SyncCopyStatusType = "success";
 /** Defines values for EncryptionAlgorithmType. */
 export type EncryptionAlgorithmType = "AES256";
+
 
 /** Optional parameters. */
 export interface ServiceSetPropertiesOptionalParams
@@ -2820,6 +2821,10 @@ export type ServiceGetUserDelegationKeyResponse = ServiceGetUserDelegationKeyHea
       parsedHeaders: ServiceGetUserDelegationKeyHeaders;
     };
   };
+
+/** Optional parameters. */
+export interface ServiceGetAccountInfoOptionalParams
+  extends coreHttp.OperationOptions {}
 
 /** Contains response data for the getAccountInfo operation. */
 export type ServiceGetAccountInfoResponse = ServiceGetAccountInfoHeaders & {
@@ -3279,6 +3284,10 @@ export type ContainerListBlobHierarchySegmentResponse = ContainerListBlobHierarc
       parsedHeaders: ContainerListBlobHierarchySegmentHeaders;
     };
   };
+
+/** Optional parameters. */
+export interface ContainerGetAccountInfoOptionalParams
+  extends coreHttp.OperationOptions {}
 
 /** Contains response data for the getAccountInfo operation. */
 export type ContainerGetAccountInfoResponse = ContainerGetAccountInfoHeaders & {
@@ -3802,6 +3811,10 @@ export type BlobSetTierResponse = BlobSetTierHeaders & {
     parsedHeaders: BlobSetTierHeaders;
   };
 };
+
+/** Optional parameters. */
+export interface BlobGetAccountInfoOptionalParams
+  extends coreHttp.OperationOptions {}
 
 /** Contains response data for the getAccountInfo operation. */
 export type BlobGetAccountInfoResponse = BlobGetAccountInfoHeaders & {

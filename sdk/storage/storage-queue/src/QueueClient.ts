@@ -30,7 +30,7 @@ import {
   SignedIdentifierModel
 } from "./generatedModels";
 import { AbortSignalLike } from "@azure/abort-controller";
-import { Messages, MessageId, Queue } from "./generated/src/operations";
+import { MessagesImpl, MessageIdImpl, QueueImpl } from "./generated/src/operations";
 import { newPipeline, StoragePipelineOptions, Pipeline } from "./Pipeline";
 import { StorageClient, CommonOptions } from "./StorageClient";
 import {
@@ -459,11 +459,11 @@ export class QueueClient extends StorageClient {
   /**
    * messagesContext provided by protocol layer.
    */
-  private messagesContext: Messages;
+  private messagesContext: MessagesImpl;
   /**
    * queueContext provided by protocol layer.
    */
-  private queueContext: Queue;
+  private queueContext: QueueImpl;
   private _name: string;
   private _messagesUrl: string;
 
@@ -579,7 +579,7 @@ export class QueueClient extends StorageClient {
     }
     super(url, pipeline);
     this._name = this.getQueueNameFromUrl();
-    this.queueContext = new Queue(this.storageClientContext);
+    this.queueContext = new QueueImpl(this.storageClientContext);
 
     // MessagesContext
     // Build the url with "messages"
@@ -588,17 +588,19 @@ export class QueueClient extends StorageClient {
       ? appendToURLPath(partsOfUrl[0], "messages") + "?" + partsOfUrl[1]
       : appendToURLPath(partsOfUrl[0], "messages");
 
-    this.messagesContext = new Messages(getStorageClientContext(this._messagesUrl, this.pipeline));
+    this.messagesContext = new MessagesImpl(
+      getStorageClientContext(this._messagesUrl, this.pipeline)
+    );
   }
 
-  private getMessageIdContext(messageId: string): MessageId {
+  private getMessageIdContext(messageId: string): MessageIdImpl {
     // Build the url with messageId
     const partsOfUrl = this._messagesUrl.split("?");
     const urlWithMessageId = partsOfUrl[1]
       ? appendToURLPath(partsOfUrl[0], messageId) + "?" + partsOfUrl[1]
       : appendToURLPath(partsOfUrl[0], messageId);
 
-    return new MessageId(getStorageClientContext(urlWithMessageId, this.pipeline));
+    return new MessageIdImpl(getStorageClientContext(urlWithMessageId, this.pipeline));
   }
 
   /**

@@ -6,7 +6,13 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
-import { Service, Queue, Messages, MessageId } from "./operations";
+import {
+  ServiceImpl,
+  QueueImpl,
+  MessagesImpl,
+  MessageIdImpl
+} from "./operations";
+import { Service, Queue, Messages, MessageId } from "./operationsInterfaces";
 import { StorageClientContext } from "./storageClientContext";
 import { StorageClientOptionalParams } from "./models";
 
@@ -19,10 +25,10 @@ export class StorageClient extends StorageClientContext {
    */
   constructor(url: string, options?: StorageClientOptionalParams) {
     super(url, options);
-    this.service = new Service(this);
-    this.queue = new Queue(this);
-    this.messages = new Messages(this);
-    this.messageId = new MessageId(this);
+    this.service = new ServiceImpl(this);
+    this.queue = new QueueImpl(this);
+    this.messages = new MessagesImpl(this);
+    this.messageId = new MessageIdImpl(this);
   }
 
   service: Service;

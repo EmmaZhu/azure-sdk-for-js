@@ -19,7 +19,7 @@ import {
   ServiceSetPropertiesResponse
 } from "./generatedModels";
 import { AbortSignalLike } from "@azure/abort-controller";
-import { Service } from "./generated/src/operations";
+import { ServiceImpl } from "./generated/src/operations";
 import { newPipeline, StoragePipelineOptions, Pipeline } from "./Pipeline";
 import { StorageClient, CommonOptions } from "./StorageClient";
 import "@azure/core-paging";
@@ -203,7 +203,7 @@ export class QueueServiceClient extends StorageClient {
   /**
    * serviceContext provided by protocol layer.
    */
-  private serviceContext: Service;
+  private serviceContext: ServiceImpl;
 
   /**
    * Creates an instance of QueueServiceClient.
@@ -282,7 +282,7 @@ export class QueueServiceClient extends StorageClient {
       pipeline = newPipeline(new AnonymousCredential(), options);
     }
     super(url, pipeline);
-    this.serviceContext = new Service(this.storageClientContext);
+    this.serviceContext = new ServiceImpl(this.storageClientContext);
   }
 
   /**

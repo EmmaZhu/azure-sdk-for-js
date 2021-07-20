@@ -14,7 +14,7 @@ import { PagedAsyncIterableIterator, PageSettings } from "@azure/core-paging";
 import { SpanStatusCode } from "@azure/core-tracing";
 import { AnonymousCredential } from "./credentials/AnonymousCredential";
 import { StorageSharedKeyCredential } from "./credentials/StorageSharedKeyCredential";
-import { Container } from "./generated/src/operations";
+import { ContainerImpl } from "./generated/src/operations";
 import {
   BlobDeleteResponse,
   BlobPrefix,
@@ -568,7 +568,7 @@ export class ContainerClient extends StorageClient {
   /**
    * containerContext provided by protocol layer.
    */
-  private containerContext: Container;
+  private containerContext: ContainerImpl;
 
   private _containerName: string;
 
@@ -693,7 +693,7 @@ export class ContainerClient extends StorageClient {
     }
     super(url, pipeline);
     this._containerName = this.getContainerNameFromUrl();
-    this.containerContext = new Container(this.storageClientContext);
+    this.containerContext = new ContainerImpl(this.storageClientContext);
   }
 
   /**

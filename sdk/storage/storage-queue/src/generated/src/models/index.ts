@@ -515,7 +515,7 @@ export interface MessageIdDeleteExceptionHeaders {
 }
 
 /** Known values of {@link StorageErrorCode} that the service accepts. */
-export const enum KnownStorageErrorCode {
+export enum KnownStorageErrorCode {
   AccountAlreadyExists = "AccountAlreadyExists",
   AccountBeingCreated = "AccountBeingCreated",
   AccountIsDisabled = "AccountIsDisabled",
@@ -579,7 +579,7 @@ export const enum KnownStorageErrorCode {
  * Defines values for StorageErrorCode. \
  * {@link KnownStorageErrorCode} can be used interchangeably with StorageErrorCode,
  *  this enum contains the known values that the service supports.
- * ### Know values supported by the service
+ * ### Known values supported by the service
  * **AccountAlreadyExists** \
  * **AccountBeingCreated** \
  * **AccountIsDisabled** \

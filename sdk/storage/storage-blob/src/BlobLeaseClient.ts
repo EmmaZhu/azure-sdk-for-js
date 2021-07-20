@@ -5,7 +5,7 @@ import { StorageClientContext } from "./generated/src/index";
 import { ContainerBreakLeaseOptionalParams } from "./generatedModels";
 import { AbortSignalLike } from "@azure/abort-controller";
 import { SpanStatusCode } from "@azure/core-tracing";
-import { Blob as StorageBlob, Container } from "./generated/src/operations";
+import { BlobImpl, ContainerImpl } from "./generated/src/operations";
 import { ModifiedAccessConditions } from "./models";
 import { CommonOptions } from "./StorageClient";
 import { ETagNone } from "./utils/constants";
@@ -100,7 +100,7 @@ export interface LeaseOperationOptions extends CommonOptions {
 export class BlobLeaseClient {
   private _leaseId: string;
   private _url: string;
-  private _containerOrBlobOperation: Container | StorageBlob;
+  private _containerOrBlobOperation: ContainerImpl | BlobImpl;
   private _isContainer: boolean;
 
   /**
@@ -135,10 +135,10 @@ export class BlobLeaseClient {
 
     if ((client as BlobClient).name === undefined) {
       this._isContainer = true;
-      this._containerOrBlobOperation = new Container(clientContext);
+      this._containerOrBlobOperation = new ContainerImpl(clientContext);
     } else {
       this._isContainer = false;
-      this._containerOrBlobOperation = new StorageBlob(clientContext);
+      this._containerOrBlobOperation = new BlobImpl(clientContext);
     }
 
     if (!leaseId) {

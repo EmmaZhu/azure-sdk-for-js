@@ -20,7 +20,7 @@ import { BlobDownloadResponse } from "./BlobDownloadResponse";
 import { BlobQueryResponse } from "./BlobQueryResponse";
 import { AnonymousCredential } from "./credentials/AnonymousCredential";
 import { StorageSharedKeyCredential } from "./credentials/StorageSharedKeyCredential";
-import { AppendBlob, Blob as StorageBlob, BlockBlob, PageBlob } from "./generated/src/operations";
+import { AppendBlobImpl, BlobImpl, BlockBlobImpl, PageBlobImpl } from "./generated/src/operations";
 import {
   AppendBlobAppendBlockFromUrlResponse,
   AppendBlobAppendBlockResponse,
@@ -837,7 +837,7 @@ export class BlobClient extends StorageClient {
   /**
    * blobContext provided by protocol layer.
    */
-  private blobContext: StorageBlob;
+  private blobContext: BlobImpl;
 
   private _name: string;
   private _containerName: string;
@@ -999,7 +999,7 @@ export class BlobClient extends StorageClient {
       blobName: this._name,
       containerName: this._containerName
     } = this.getBlobAndContainerNamesFromUrl());
-    this.blobContext = new StorageBlob(this.storageClientContext);
+    this.blobContext = new BlobImpl(this.storageClientContext);
 
     this._snapshot = getURLParameter(this.url, URLConstants.Parameters.SNAPSHOT) as string;
     this._versionId = getURLParameter(this.url, URLConstants.Parameters.VERSIONID) as string;
@@ -2505,7 +2505,7 @@ export class AppendBlobClient extends BlobClient {
   /**
    * appendBlobsContext provided by protocol layer.
    */
-  private appendBlobContext: AppendBlob;
+  private appendBlobContext: AppendBlobImpl;
 
   /**
    *
@@ -2648,7 +2648,7 @@ export class AppendBlobClient extends BlobClient {
       throw new Error("Expecting non-empty strings for containerName and blobName parameters");
     }
     super(url, pipeline);
-    this.appendBlobContext = new AppendBlob(this.storageClientContext);
+    this.appendBlobContext = new AppendBlobImpl(this.storageClientContext);
   }
 
   /**
@@ -3498,12 +3498,12 @@ export class BlockBlobClient extends BlobClient {
    * Note. Ideally BlobClient should set BlobClient.blobContext to protected. However, API
    * extractor has issue blocking that. Here we redecelare _blobContext in BlockBlobClient.
    */
-  private _blobContext: StorageBlob;
+  private _blobContext: BlobImpl;
 
   /**
    * blockBlobContext provided by protocol layer.
    */
-  private blockBlobContext: BlockBlob;
+  private blockBlobContext: BlockBlobImpl;
 
   /**
    *
@@ -3646,8 +3646,8 @@ export class BlockBlobClient extends BlobClient {
       throw new Error("Expecting non-empty strings for containerName and blobName parameters");
     }
     super(url, pipeline);
-    this.blockBlobContext = new BlockBlob(this.storageClientContext);
-    this._blobContext = new StorageBlob(this.storageClientContext);
+    this.blockBlobContext = new BlockBlobImpl(this.storageClientContext);
+    this._blobContext = new BlobImpl(this.storageClientContext);
   }
 
   /**
@@ -4751,7 +4751,7 @@ export class PageBlobClient extends BlobClient {
   /**
    * pageBlobsContext provided by protocol layer.
    */
-  private pageBlobContext: PageBlob;
+  private pageBlobContext: PageBlobImpl;
 
   /**
    *
@@ -4886,7 +4886,7 @@ export class PageBlobClient extends BlobClient {
       throw new Error("Expecting non-empty strings for containerName and blobName parameters");
     }
     super(url, pipeline);
-    this.pageBlobContext = new PageBlob(this.storageClientContext);
+    this.pageBlobContext = new PageBlobImpl(this.storageClientContext);
   }
 
   /**

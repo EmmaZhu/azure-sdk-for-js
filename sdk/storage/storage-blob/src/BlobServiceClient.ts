@@ -28,7 +28,7 @@ import {
   ContainerRenameResponse,
   LeaseAccessConditions
 } from "./generatedModels";
-import { Container, Service } from "./generated/src/operations";
+import { ContainerImpl, ServiceImpl } from "./generated/src/operations";
 import { newPipeline, StoragePipelineOptions, Pipeline } from "./Pipeline";
 import {
   ContainerClient,
@@ -390,7 +390,7 @@ export class BlobServiceClient extends StorageClient {
   /**
    * serviceContext provided by protocol layer.
    */
-  private serviceContext: Service;
+  private serviceContext: ServiceImpl;
 
   /**
    *
@@ -501,7 +501,7 @@ export class BlobServiceClient extends StorageClient {
       pipeline = newPipeline(new AnonymousCredential(), options);
     }
     super(url, pipeline);
-    this.serviceContext = new Service(this.storageClientContext);
+    this.serviceContext = new ServiceImpl(this.storageClientContext);
   }
 
   /**
@@ -605,7 +605,7 @@ export class BlobServiceClient extends StorageClient {
         options.destinationContainerName || deletedContainerName
       );
       // Hack to access a protected member.
-      const containerContext = new Container(containerClient["storageClientContext"]);
+      const containerContext = new ContainerImpl(containerClient["storageClientContext"]);
       const containerUndeleteResponse = await containerContext.restore({
         deletedContainerName,
         deletedContainerVersion,
@@ -643,7 +643,7 @@ export class BlobServiceClient extends StorageClient {
     try {
       const containerClient = this.getContainerClient(destinationContainerName);
       // Hack to access a protected member.
-      const containerContext = new Container(containerClient["storageClientContext"]);
+      const containerContext = new ContainerImpl(containerClient["storageClientContext"]);
       const containerRenameResponse = await containerContext.rename(sourceContainerName, {
         ...updatedOptions,
         sourceLeaseId: options.sourceCondition?.leaseId

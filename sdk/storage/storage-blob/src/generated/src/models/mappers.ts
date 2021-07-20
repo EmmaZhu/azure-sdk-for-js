@@ -1824,7 +1824,8 @@ export const QueryFormat: coreHttp.CompositeMapper = {
         serializedName: "ParquetTextConfiguration",
         xmlName: "ParquetTextConfiguration",
         type: {
-          name: "any"
+          name: "Dictionary",
+          value: { type: { name: "any" } }
         }
       }
     }
@@ -2556,12 +2557,12 @@ export const ContainerGetPropertiesHeaders: coreHttp.CompositeMapper = {
     modelProperties: {
       metadata: {
         serializedName: "x-ms-meta",
+        headerCollectionPrefix: "x-ms-meta-",
         xmlName: "x-ms-meta",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
-        },
-        headerCollectionPrefix: "x-ms-meta-"
+        }
       },
       etag: {
         serializedName: "etag",
@@ -3785,12 +3786,12 @@ export const BlobDownloadHeaders: coreHttp.CompositeMapper = {
       },
       metadata: {
         serializedName: "x-ms-meta",
+        headerCollectionPrefix: "x-ms-meta-",
         xmlName: "x-ms-meta",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
-        },
-        headerCollectionPrefix: "x-ms-meta-"
+        }
       },
       objectReplicationPolicyId: {
         serializedName: "x-ms-or-policy-id",
@@ -3801,12 +3802,12 @@ export const BlobDownloadHeaders: coreHttp.CompositeMapper = {
       },
       objectReplicationRules: {
         serializedName: "x-ms-or",
+        headerCollectionPrefix: "x-ms-or-",
         xmlName: "x-ms-or",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
-        },
-        headerCollectionPrefix: "x-ms-or-"
+        }
       },
       contentLength: {
         serializedName: "content-length",
@@ -4143,12 +4144,12 @@ export const BlobGetPropertiesHeaders: coreHttp.CompositeMapper = {
       },
       metadata: {
         serializedName: "x-ms-meta",
+        headerCollectionPrefix: "x-ms-meta-",
         xmlName: "x-ms-meta",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
-        },
-        headerCollectionPrefix: "x-ms-meta-"
+        }
       },
       objectReplicationPolicyId: {
         serializedName: "x-ms-or-policy-id",
@@ -4159,12 +4160,12 @@ export const BlobGetPropertiesHeaders: coreHttp.CompositeMapper = {
       },
       objectReplicationRules: {
         serializedName: "x-ms-or",
+        headerCollectionPrefix: "x-ms-or-",
         xmlName: "x-ms-or",
         type: {
           name: "Dictionary",
           value: { type: { name: "String" } }
-        },
-        headerCollectionPrefix: "x-ms-or-"
+        }
       },
       blobType: {
         serializedName: "x-ms-blob-type",
@@ -5977,6 +5978,7 @@ export const BlobQueryHeaders: coreHttp.CompositeMapper = {
       },
       metadata: {
         serializedName: "x-ms-meta",
+        headerCollectionPrefix: "x-ms-meta-",
         xmlName: "x-ms-meta",
         type: {
           name: "Dictionary",

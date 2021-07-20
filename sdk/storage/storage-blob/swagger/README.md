@@ -18,8 +18,8 @@ optional-response-headers: true
 v3: true
 disable-async-iterators: true
 add-credentials: false
-use-extension:
-  "@autorest/typescript": "6.0.0-dev.20210218.1"
+typescript: true
+use-core-v2: false
 package-version: 12.7.0-beta.1
 ```
 

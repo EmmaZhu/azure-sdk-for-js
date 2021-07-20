@@ -7,13 +7,21 @@
  */
 
 import {
+  ServiceImpl,
+  ContainerImpl,
+  BlobImpl,
+  PageBlobImpl,
+  AppendBlobImpl,
+  BlockBlobImpl
+} from "./operations";
+import {
   Service,
   Container,
   Blob,
   PageBlob,
   AppendBlob,
   BlockBlob
-} from "./operations";
+} from "./operationsInterfaces";
 import { StorageClientContext } from "./storageClientContext";
 import { StorageClientOptionalParams } from "./models";
 
@@ -26,12 +34,12 @@ export class StorageClient extends StorageClientContext {
    */
   constructor(url: string, options?: StorageClientOptionalParams) {
     super(url, options);
-    this.service = new Service(this);
-    this.container = new Container(this);
-    this.blob = new Blob(this);
-    this.pageBlob = new PageBlob(this);
-    this.appendBlob = new AppendBlob(this);
-    this.blockBlob = new BlockBlob(this);
+    this.service = new ServiceImpl(this);
+    this.container = new ContainerImpl(this);
+    this.blob = new BlobImpl(this);
+    this.pageBlob = new PageBlobImpl(this);
+    this.appendBlob = new AppendBlobImpl(this);
+    this.blockBlob = new BlockBlobImpl(this);
   }
 
   service: Service;

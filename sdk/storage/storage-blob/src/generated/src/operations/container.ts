@@ -6,6 +6,7 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
+import { Container } from "../operationsInterfaces";
 import * as coreHttp from "@azure/core-http";
 import * as Mappers from "../models/mappers";
 import * as Parameters from "../models/parameters";
@@ -43,11 +44,12 @@ import {
   ContainerListBlobFlatSegmentResponse,
   ContainerListBlobHierarchySegmentOptionalParams,
   ContainerListBlobHierarchySegmentResponse,
+  ContainerGetAccountInfoOptionalParams,
   ContainerGetAccountInfoResponse
 } from "../models";
 
 /** Class representing a Container. */
-export class Container {
+export class ContainerImpl implements Container {
   private readonly client: StorageClientContext;
 
   /**
@@ -362,7 +364,7 @@ export class Container {
    * @param options The options parameters.
    */
   getAccountInfo(
-    options?: coreHttp.OperationOptions
+    options?: ContainerGetAccountInfoOptionalParams
   ): Promise<ContainerGetAccountInfoResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
@@ -632,7 +634,6 @@ const submitBatchOperationSpec: coreHttp.OperationSpec = {
   ],
   urlParameters: [Parameters.url],
   headerParameters: [
-    Parameters.contentType,
     Parameters.accept,
     Parameters.version,
     Parameters.requestId,

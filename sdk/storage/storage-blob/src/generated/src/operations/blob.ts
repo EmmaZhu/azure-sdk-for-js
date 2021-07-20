@@ -6,6 +6,7 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
+import { Blob } from "../operationsInterfaces";
 import * as coreHttp from "@azure/core-http";
 import * as Mappers from "../models/mappers";
 import * as Parameters from "../models/parameters";
@@ -53,6 +54,7 @@ import {
   AccessTier,
   BlobSetTierOptionalParams,
   BlobSetTierResponse,
+  BlobGetAccountInfoOptionalParams,
   BlobGetAccountInfoResponse,
   BlobQueryOptionalParams,
   BlobQueryResponse,
@@ -63,7 +65,7 @@ import {
 } from "../models";
 
 /** Class representing a Blob. */
-export class Blob {
+export class BlobImpl implements Blob {
   private readonly client: StorageClientContext;
 
   /**
@@ -461,7 +463,7 @@ export class Blob {
    * @param options The options parameters.
    */
   getAccountInfo(
-    options?: coreHttp.OperationOptions
+    options?: BlobGetAccountInfoOptionalParams
   ): Promise<BlobGetAccountInfoResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})

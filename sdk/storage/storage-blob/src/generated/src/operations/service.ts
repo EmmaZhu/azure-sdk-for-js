@@ -6,6 +6,7 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
+import { Service } from "../operationsInterfaces";
 import * as coreHttp from "@azure/core-http";
 import * as Mappers from "../models/mappers";
 import * as Parameters from "../models/parameters";
@@ -23,6 +24,7 @@ import {
   KeyInfo,
   ServiceGetUserDelegationKeyOptionalParams,
   ServiceGetUserDelegationKeyResponse,
+  ServiceGetAccountInfoOptionalParams,
   ServiceGetAccountInfoResponse,
   ServiceSubmitBatchOptionalParams,
   ServiceSubmitBatchResponse,
@@ -31,7 +33,7 @@ import {
 } from "../models";
 
 /** Class representing a Service. */
-export class Service {
+export class ServiceImpl implements Service {
   private readonly client: StorageClientContext;
 
   /**
@@ -138,7 +140,7 @@ export class Service {
    * @param options The options parameters.
    */
   getAccountInfo(
-    options?: coreHttp.OperationOptions
+    options?: ServiceGetAccountInfoOptionalParams
   ): Promise<ServiceGetAccountInfoResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
@@ -379,7 +381,6 @@ const submitBatchOperationSpec: coreHttp.OperationSpec = {
   queryParameters: [Parameters.timeoutInSeconds, Parameters.comp4],
   urlParameters: [Parameters.url],
   headerParameters: [
-    Parameters.contentType,
     Parameters.accept,
     Parameters.version,
     Parameters.requestId,

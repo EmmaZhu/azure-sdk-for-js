@@ -6,6 +6,7 @@
  * Changes may cause incorrect behavior and will be lost if the code is regenerated.
  */
 
+import { BlockBlob } from "../operationsInterfaces";
 import * as coreHttp from "@azure/core-http";
 import * as Mappers from "../models/mappers";
 import * as Parameters from "../models/parameters";
@@ -28,7 +29,7 @@ import {
 } from "../models";
 
 /** Class representing a BlockBlob. */
-export class BlockBlob {
+export class BlockBlobImpl implements BlockBlob {
   private readonly client: StorageClientContext;
 
   /**
@@ -196,7 +197,6 @@ export class BlockBlob {
 }
 // Operation Specifications
 const xmlSerializer = new coreHttp.Serializer(Mappers, /* isXml */ true);
-const serializer = new coreHttp.Serializer(Mappers, /* isXml */ false);
 
 const uploadOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",
@@ -244,8 +244,10 @@ const uploadOperationSpec: coreHttp.OperationSpec = {
     Parameters.accept2,
     Parameters.blobType2
   ],
+  isXML: true,
+  contentType: "application/xml; charset=utf-8",
   mediaType: "binary",
-  serializer
+  serializer: xmlSerializer
 };
 const putBlobFromUrlOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",
@@ -333,8 +335,10 @@ const stageBlockOperationSpec: coreHttp.OperationSpec = {
     Parameters.contentType1,
     Parameters.accept2
   ],
+  isXML: true,
+  contentType: "application/xml; charset=utf-8",
   mediaType: "binary",
-  serializer
+  serializer: xmlSerializer
 };
 const stageBlockFromURLOperationSpec: coreHttp.OperationSpec = {
   path: "/{containerName}/{blob}",
