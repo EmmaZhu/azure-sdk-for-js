@@ -45,6 +45,8 @@ export interface Path {
   owner?: string;
   group?: string;
   permissions?: string;
+  /** The name of the encryption scope under which the blob is encrypted. */
+  encryptionScope?: string;
 }
 
 /** An enumeration of blobs */

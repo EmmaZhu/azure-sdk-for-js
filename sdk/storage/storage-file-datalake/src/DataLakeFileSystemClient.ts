@@ -189,6 +189,11 @@ export class DataLakeFileSystemClient extends StorageClient {
       return await this.blobContainerClient.create({
         ...options,
         access: toContainerPublicAccessType(options.access),
+        containerEncryptionScope: options.fileSystemEncryptionScope
+          ? {
+              defaultEncryptionScope: options.fileSystemEncryptionScope.defaultEncryptionScope
+            }
+          : undefined,
         tracingOptions: updatedOptions.tracingOptions
       });
     } catch (e) {

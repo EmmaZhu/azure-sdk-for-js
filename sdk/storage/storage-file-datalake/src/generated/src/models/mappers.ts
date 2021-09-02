@@ -197,6 +197,13 @@ export const Path: coreHttp.CompositeMapper = {
         type: {
           name: "String"
         }
+      },
+      encryptionScope: {
+        serializedName: "EncryptionScope",
+        xmlName: "EncryptionScope",
+        type: {
+          name: "String"
+        }
       }
     }
   }

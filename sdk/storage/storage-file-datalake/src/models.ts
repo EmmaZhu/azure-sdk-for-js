@@ -307,6 +307,16 @@ export interface FileSystemCreateOptions extends CommonOptions {
   abortSignal?: AbortSignalLike;
   metadata?: Metadata;
   access?: PublicAccessType;
+  fileSystemEncryptionScope?: FileSystemEncryptionScope;
+}
+
+// There will be more parameters for encryption scope setting on file system in the future, so reserve a structure for it.
+/**
+ * Options to indicate encryption scope info when creating a file system.
+ */
+export interface FileSystemEncryptionScope {
+  /** Optional.  Version 2019-07-07 and later.  Specifies the default encryption scope to set on the container and use for all future writes. */
+  defaultEncryptionScope?: string;
 }
 
 export interface FileSystemCreateHeaders {

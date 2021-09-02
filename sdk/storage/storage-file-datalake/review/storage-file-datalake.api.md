@@ -761,6 +761,8 @@ export interface FileSystemCreateOptions extends CommonOptions {
     // (undocumented)
     access?: PublicAccessType;
     // (undocumented)
+    fileSystemEncryptionScope?: FileSystemEncryptionScope;
+    // (undocumented)
     metadata?: Metadata;
 }
 
@@ -802,6 +804,11 @@ export type FileSystemDeleteResponse = FileSystemDeleteHeaders & {
         parsedHeaders: FileSystemDeleteHeaders;
     };
 };
+
+// @public
+export interface FileSystemEncryptionScope {
+    defaultEncryptionScope?: string;
+}
 
 // @public
 export interface FileSystemExistsOptions extends CommonOptions {
@@ -1581,6 +1588,7 @@ export interface PathListModel {
 export interface PathModel {
     // (undocumented)
     contentLength?: number;
+    encryptionScope?: string;
     // (undocumented)
     etag?: string;
     // (undocumented)
