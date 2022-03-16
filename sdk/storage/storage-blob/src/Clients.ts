@@ -61,6 +61,9 @@ import {
   SequenceNumberActionType,
   BlockBlobPutBlobFromUrlResponse,
   BlobHTTPHeaders,
+  PageBlobGetPageRangesResponseModel,
+  PageRangeInfo,
+  PageBlobGetPageRangesDiffResponseModel,
 } from "./generatedModels";
 import {
   AppendBlobRequestConditions,
@@ -140,6 +143,7 @@ import {
   BlobSetImmutabilityPolicyResponse,
   BlobSetLegalHoldResponse,
 } from "./generatedModels";
+import { PagedAsyncIterableIterator, PageSettings } from "@azure/core-paging";
 
 /**
  * Options to configure the {@link BlobClient.beginCopyFromURL} operation.
@@ -4654,6 +4658,69 @@ export interface PageBlobGetPageRangesOptions extends CommonOptions {
 }
 
 /**
+ * Options to configure Container - List Segment operations.
+ *
+ * See:
+ * - {@link ContainerClient.listSegments}
+ * - {@link ContainerClient.listBlobFlatSegment}
+ * - {@link ContainerClient.listBlobHierarchySegment}
+ * - {@link ContainerClient.listHierarchySegments}
+ * - {@link ContainerClient.listItemsByHierarchy}
+ */
+interface PageBlobGetPageRangesSegmentOptions extends CommonOptions {
+  /**
+   * An implementation of the `AbortSignalLike` interface to signal the request to cancel the operation.
+   * For example, use the &commat;azure/abort-controller to create an `AbortSignal`.
+   */
+  abortSignal?: AbortSignalLike;
+  /**
+   * Starting byte position of the page ranges.
+   */
+  offset?: number;
+  /**
+   * Number of bytes to get.
+   */
+  count?: number;
+  /**
+   * Conditions to meet when getting page ranges.
+   */
+  conditions?: BlobRequestConditions;
+  /**
+   * Specifies the maximum number of containers
+   * to return. If the request does not specify maxPageSize, or specifies a
+   * value greater than 5000, the server will return up to 5000 items. Note
+   * that if the listing operation crosses a partition boundary, then the
+   * service will return a continuation token for retrieving the remainder of
+   * the results. For this reason, it is possible that the service will return
+   * fewer results than specified by maxPageSize, or than the default of 5000.
+   */
+  maxPageSize?: number;
+}
+
+/**
+ * Options to configure the {@link PageBlobClient.getPageRanges} operation.
+ */
+export interface PageBlobGetPageRangesInPagesOptions extends CommonOptions {
+  /**
+   * An implementation of the `AbortSignalLike` interface to signal the request to cancel the operation.
+   * For example, use the &commat;azure/abort-controller to create an `AbortSignal`.
+   */
+  abortSignal?: AbortSignalLike;
+  /**
+   * Starting byte position of the page ranges.
+   */
+  offset?: number;
+  /**
+   * Number of bytes to get.
+   */
+  count?: number;
+  /**
+   * Conditions to meet when getting page ranges.
+   */
+  conditions?: BlobRequestConditions;
+}
+
+/**
  * Options to configure the {@link PageBlobClient.getRangesDiff} operation.
  */
 export interface PageBlobGetPageRangesDiffOptions extends CommonOptions {
@@ -4670,6 +4737,76 @@ export interface PageBlobGetPageRangesDiffOptions extends CommonOptions {
    * (unused)
    */
   range?: string;
+}
+
+/**
+ * Options to configure Container - List Segment operations.
+ *
+ * See:
+ * - {@link ContainerClient.listSegments}
+ * - {@link ContainerClient.listBlobFlatSegment}
+ * - {@link ContainerClient.listBlobHierarchySegment}
+ * - {@link ContainerClient.listHierarchySegments}
+ * - {@link ContainerClient.listItemsByHierarchy}
+ */
+interface PageBlobGetPageRangesDiffSegmentOptions extends CommonOptions {
+  /**
+   * An implementation of the `AbortSignalLike` interface to signal the request to cancel the operation.
+   * For example, use the &commat;azure/abort-controller to create an `AbortSignal`.
+   */
+  abortSignal?: AbortSignalLike;
+  /**
+   * Starting byte position of the page ranges.
+   */
+  offset: number;
+  /**
+   * Number of bytes to get.
+   */
+  count: number;
+  /**
+   * Timestamp of snapshot to retrieve the difference.
+   */
+  prevSnapshot: string;
+  /**
+   * Conditions to meet when getting page ranges.
+   */
+  conditions?: BlobRequestConditions;
+  /**
+   * Specifies the maximum number of containers
+   * to return. If the request does not specify maxPageSize, or specifies a
+   * value greater than 5000, the server will return up to 5000 items. Note
+   * that if the listing operation crosses a partition boundary, then the
+   * service will return a continuation token for retrieving the remainder of
+   * the results. For this reason, it is possible that the service will return
+   * fewer results than specified by maxPageSize, or than the default of 5000.
+   */
+  maxPageSize?: number;
+}
+/**
+ * Options to configure the {@link PageBlobClient.getPageRanges} operation.
+ */
+export interface PageBlobGetPageRangesDiffInPagesOptions extends CommonOptions {
+  /**
+   * An implementation of the `AbortSignalLike` interface to signal the request to cancel the operation.
+   * For example, use the &commat;azure/abort-controller to create an `AbortSignal`.
+   */
+  abortSignal?: AbortSignalLike;
+  /**
+   * Conditions to meet when getting page ranges diff.
+   */
+  conditions?: BlobRequestConditions;
+  /**
+   * Starting byte position of the page ranges.
+   */
+  offset: number;
+  /**
+   * Number of bytes to get.
+   */
+  count: number;
+  /**
+   * Timestamp of snapshot to retrieve the difference.
+   */
+  prevSnapshot: string;
 }
 
 /**
@@ -5246,6 +5383,143 @@ export class PageBlobClient extends BlobClient {
   }
 
   /**
+   * listBlobFlatSegment returns a single segment of blobs starting from the
+   * specified Marker. Use an empty Marker to start enumeration from the beginning.
+   * After getting a segment, process it, and then call listBlobsFlatSegment again
+   * (passing the the previously-returned Marker) to get the next segment.
+   * @see https://docs.microsoft.com/rest/api/storageservices/list-blobs
+   *
+   * @param marker - A string value that identifies the portion of the list to be returned with the next list operation.
+   * @param options - Options to Container List Blob Flat Segment operation.
+   */
+  private async getPageRangesSegment(
+    marker?: string,
+    options: PageBlobGetPageRangesSegmentOptions = {}
+  ): Promise<PageBlobGetPageRangesResponseModel> {
+    const { span, updatedOptions } = createSpan("PageBlobClient-getPageRangesSegment", options);
+    try {
+      return await this.pageBlobContext.getPageRanges({
+        abortSignal: options.abortSignal,
+        leaseAccessConditions: options.conditions,
+        modifiedAccessConditions: {
+          ...options.conditions,
+          ifTags: options.conditions?.tagConditions,
+        },
+        range: rangeToString({ offset: options.offset ?? 0, count: options.count }),
+        marker: marker,
+        ...convertTracingToRequestOptionsBase(updatedOptions),
+      });
+    } catch (e) {
+      span.setStatus({
+        code: SpanStatusCode.ERROR,
+        message: e.message,
+      });
+      throw e;
+    } finally {
+      span.end();
+    }
+  }
+  /**
+   * Returns an AsyncIterableIterator for ContainerListBlobFlatSegmentResponse
+   *
+   * @param marker - A string value that identifies the portion of
+   *                          the list of blobs to be returned with the next listing operation. The
+   *                          operation returns the ContinuationToken value within the response body if the
+   *                          listing operation did not return all blobs remaining to be listed
+   *                          with the current page. The ContinuationToken value can be used as the value for
+   *                          the marker parameter in a subsequent call to request the next page of list
+   *                          items. The marker value is opaque to the client.
+   * @param options - Options to list blobs operation.
+   */
+  private async *getPageRangeItemSegments(
+    marker?: string,
+    options: PageBlobGetPageRangesSegmentOptions = {}
+  ): AsyncIterableIterator<PageBlobGetPageRangesResponseModel> {
+    let getPageRangeItemSegmentsResponse;
+    if (!!marker || marker === undefined) {
+      do {
+        getPageRangeItemSegmentsResponse = await this.getPageRangesSegment(marker, options);
+        marker = getPageRangeItemSegmentsResponse.continuationToken;
+        yield await getPageRangeItemSegmentsResponse;
+      } while (marker);
+    }
+  }
+
+  /**
+   * Returns an AsyncIterableIterator of {@link BlobItem} objects
+   *
+   * @param options - Options to list blobs operation.
+   */
+  private async *getPageRangeItems(
+    options: PageBlobGetPageRangesSegmentOptions = {}
+  ): AsyncIterableIterator<PageRangeInfo> {
+    let marker: string | undefined;
+    for await (const getPageRangesSegment of this.getPageRangeItemSegments(marker, options)) {
+      if (getPageRangesSegment.pageRange) {
+        for (const pageRangeItem in getPageRangesSegment.pageRange) {
+          pageRangeItem;
+          yield {
+            isClear: false,
+            start: 0,
+            end: 0,
+          };
+        }
+      }
+
+      if (getPageRangesSegment.clearRange) {
+        for (const pageRangeItem in getPageRangesSegment.clearRange) {
+          pageRangeItem;
+          yield {
+            isClear: true,
+            start: 0,
+            end: 0,
+          };
+        }
+      }
+    }
+  }
+
+  /**
+   * Returns the list of valid page ranges for a page blob or snapshot of a page blob.
+   * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+   *
+   * @param offset - Starting byte position of the page ranges.
+   * @param count - Number of bytes to get.
+   * @param options - Options to the Page Blob Get Ranges operation.
+   * @returns Response data for the Page Blob Get Ranges operation.
+   */
+  public getPageRangesInPages(
+    options: PageBlobGetPageRangesInPagesOptions
+  ): PagedAsyncIterableIterator<PageRangeInfo, PageBlobGetPageRangesResponseModel> {
+    options.conditions = options.conditions || {};
+    // AsyncIterableIterator to iterate over blobs
+    const iter = this.getPageRangeItems(options);
+    return {
+      /**
+       * The next method, part of the iteration protocol
+       */
+      next() {
+        return iter.next();
+      },
+      /**
+       * The connection to the async iterator, part of the iteration protocol
+       */
+      [Symbol.asyncIterator]() {
+        return this;
+      },
+      /**
+       * Return an AsyncIterableIterator that works a page at a time
+       */
+      byPage: (settings: PageSettings = {}) => {
+        return this.getPageRangeItemSegments(settings.continuationToken, {
+          maxPageSize: settings.maxPageSize,
+          ...options,
+        });
+      },
+    };
+  }
+
+  /**
    * Gets the collection of page ranges that differ between a specified snapshot and this page blob.
    * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
    *
@@ -5287,6 +5561,151 @@ export class PageBlobClient extends BlobClient {
     } finally {
       span.end();
     }
+  }
+
+  /**
+   * listBlobFlatSegment returns a single segment of blobs starting from the
+   * specified Marker. Use an empty Marker to start enumeration from the beginning.
+   * After getting a segment, process it, and then call listBlobsFlatSegment again
+   * (passing the the previously-returned Marker) to get the next segment.
+   * @see https://docs.microsoft.com/rest/api/storageservices/list-blobs
+   *
+   * @param marker - A string value that identifies the portion of the list to be returned with the next list operation.
+   * @param options - Options to Container List Blob Flat Segment operation.
+   */
+  private async getPageRangesDiffSegment(
+    options: PageBlobGetPageRangesDiffSegmentOptions,
+    marker?: string
+  ): Promise<PageBlobGetPageRangesResponseModel> {
+    const { span, updatedOptions } = createSpan("PageBlobClient-getPageRangesDiffSegment", options);
+    try {
+      return await this.pageBlobContext.getPageRangesDiff({
+        abortSignal: options.abortSignal,
+        leaseAccessConditions: options.conditions,
+        modifiedAccessConditions: {
+          ...options.conditions,
+          ifTags: options.conditions?.tagConditions,
+        },
+        prevsnapshot: options.prevSnapshot,
+        range: rangeToString({
+          offset: options.offset,
+          count: options.count,
+        }),
+        marker: marker,
+        ...convertTracingToRequestOptionsBase(updatedOptions),
+      });
+    } catch (e) {
+      span.setStatus({
+        code: SpanStatusCode.ERROR,
+        message: e.message,
+      });
+      throw e;
+    } finally {
+      span.end();
+    }
+  }
+  /**
+   * Returns an AsyncIterableIterator for ContainerListBlobFlatSegmentResponse
+   *
+   * @param marker - A string value that identifies the portion of
+   *                          the list of blobs to be returned with the next listing operation. The
+   *                          operation returns the ContinuationToken value within the response body if the
+   *                          listing operation did not return all blobs remaining to be listed
+   *                          with the current page. The ContinuationToken value can be used as the value for
+   *                          the marker parameter in a subsequent call to request the next page of list
+   *                          items. The marker value is opaque to the client.
+   * @param options - Options to list blobs operation.
+   */
+  private async *getPageRangeDiffItemSegments(
+    options: PageBlobGetPageRangesDiffSegmentOptions,
+    marker?: string
+  ): AsyncIterableIterator<PageBlobGetPageRangesDiffResponseModel> {
+    let getPageRangeItemSegmentsResponse;
+    if (!!marker || marker === undefined) {
+      do {
+        getPageRangeItemSegmentsResponse = await this.getPageRangesDiffSegment(options, marker);
+        marker = getPageRangeItemSegmentsResponse.continuationToken;
+        yield await getPageRangeItemSegmentsResponse;
+      } while (marker);
+    }
+  }
+
+  /**
+   * Returns an AsyncIterableIterator of {@link BlobItem} objects
+   *
+   * @param options - Options to list blobs operation.
+   */
+  private async *getPageRangeDiffItems(
+    options: PageBlobGetPageRangesDiffSegmentOptions
+  ): AsyncIterableIterator<PageRangeInfo> {
+    let marker: string | undefined;
+    for await (const getPageRangesSegment of this.getPageRangeDiffItemSegments(options, marker)) {
+      marker = getPageRangesSegment.continuationToken;
+      if (getPageRangesSegment.pageRange) {
+        for (const pageRangeItem in getPageRangesSegment.pageRange) {
+          pageRangeItem;
+          yield {
+            isClear: false,
+            start: 0,
+            end: 0,
+          };
+        }
+      }
+
+      if (getPageRangesSegment.clearRange) {
+        for (const pageRangeItem in getPageRangesSegment.clearRange) {
+          pageRangeItem;
+          yield {
+            isClear: true,
+            start: 0,
+            end: 0,
+          };
+        }
+      }
+    }
+  }
+
+  /**
+   * Returns the list of valid page ranges for a page blob or snapshot of a page blob.
+   * @see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges
+   *
+   * @param offset - Starting byte position of the page ranges.
+   * @param count - Number of bytes to get.
+   * @param options - Options to the Page Blob Get Ranges operation.
+   * @returns Response data for the Page Blob Get Ranges operation.
+   */
+  public getPageRangesDiffInPages(
+    options: PageBlobGetPageRangesDiffInPagesOptions
+  ): PagedAsyncIterableIterator<PageRangeInfo, PageBlobGetPageRangesDiffResponseModel> {
+    options.conditions = options.conditions || {};
+    // AsyncIterableIterator to iterate over blobs
+    const iter = this.getPageRangeDiffItems(options);
+    return {
+      /**
+       * The next method, part of the iteration protocol
+       */
+      next() {
+        return iter.next();
+      },
+      /**
+       * The connection to the async iterator, part of the iteration protocol
+       */
+      [Symbol.asyncIterator]() {
+        return this;
+      },
+      /**
+       * Return an AsyncIterableIterator that works a page at a time
+       */
+      byPage: (settings: PageSettings = {}) => {
+        return this.getPageRangeDiffItemSegments(
+          {
+            maxPageSize: settings.maxPageSize,
+            ...options,
+          },
+          settings.continuationToken
+        );
+      },
+    };
   }
 
   /**

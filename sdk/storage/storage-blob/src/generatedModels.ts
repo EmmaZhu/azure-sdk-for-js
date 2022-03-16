@@ -111,9 +111,9 @@ export {
   PageBlobCopyIncrementalHeaders,
   PageBlobCreateHeaders,
   PageBlobGetPageRangesHeaders,
-  PageBlobGetPageRangesResponse,
+  PageBlobGetPageRangesResponse as PageBlobGetPageRangesResponseModel,
   PageBlobGetPageRangesDiffHeaders,
-  PageBlobGetPageRangesDiffResponse,
+  PageBlobGetPageRangesDiffResponse as PageBlobGetPageRangesDiffResponseModel,
   PageBlobResizeHeaders,
   PageBlobResizeResponse,
   PageBlobUpdateSequenceNumberHeaders,
@@ -248,4 +248,10 @@ export interface FilterBlobSegment {
   where: string;
   blobs: FilterBlobItem[];
   continuationToken?: string;
+}
+
+export interface PageRangeInfo {
+  start: number;
+  end: number;
+  isClear: boolean;
 }
