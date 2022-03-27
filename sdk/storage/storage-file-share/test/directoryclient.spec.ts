@@ -96,6 +96,7 @@ describe("DirectoryClient", () => {
       metadata: metadata,
       creationTime: now,
       lastWriteTime: now,
+      changeOn: now,
       filePermissionKey: defaultDirCreateResp.filePermissionKey,
       fileAttributes: fullDirAttributes,
     });
@@ -114,11 +115,13 @@ describe("DirectoryClient", () => {
     assert.ok(respFileAttributes.noScrubData);
     assert.equal(truncatedISO8061Date(result.fileCreatedOn!), truncatedISO8061Date(now));
     assert.equal(truncatedISO8061Date(result.fileLastWriteOn!), truncatedISO8061Date(now));
+    assert.equal(truncatedISO8061Date(result.fileChangeOn!), truncatedISO8061Date(now));
     assert.equal(result.filePermissionKey!, defaultDirCreateResp.filePermissionKey!);
     assert.ok(result.fileChangeOn!);
     assert.ok(result.fileId!);
     assert.ok(result.fileParentId!);
   });
+
   it("create with all parameters configured setting filePermission", async () => {
     const getPermissionResp = await shareClient.getPermission(
       defaultDirCreateResp.filePermissionKey!
@@ -223,6 +226,7 @@ describe("DirectoryClient", () => {
     await dirClient.setProperties({
       creationTime: now,
       lastWriteTime: now,
+      changeOn: now,
       filePermission: getPermissionResp.permission,
       fileAttributes: fullDirAttributes,
     });
@@ -240,6 +244,7 @@ describe("DirectoryClient", () => {
     assert.ok(respFileAttributes.noScrubData);
     assert.equal(truncatedISO8061Date(result.fileCreatedOn!), truncatedISO8061Date(now));
     assert.equal(truncatedISO8061Date(result.fileLastWriteOn!), truncatedISO8061Date(now));
+    assert.equal(truncatedISO8061Date(result.fileChangeOn!), truncatedISO8061Date(now));
     assert.ok(result.filePermissionKey!);
     assert.ok(result.fileChangeOn!);
     assert.ok(result.fileId!);

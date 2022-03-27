@@ -101,6 +101,7 @@ describe("FileClient", () => {
       },
       creationTime: now,
       lastWriteTime: now,
+      changeOn: now,
       filePermissionKey: defaultDirCreateResp.filePermissionKey,
       fileAttributes: fullFileAttributes,
     };
@@ -119,6 +120,7 @@ describe("FileClient", () => {
     assert.ok(respFileAttributesFromDownload.temporary);
     assert.equal(truncatedISO8061Date(result.fileCreatedOn!), truncatedISO8061Date(now));
     assert.equal(truncatedISO8061Date(result.fileLastWriteOn!), truncatedISO8061Date(now));
+    assert.equal(truncatedISO8061Date(result.fileChangeOn!), truncatedISO8061Date(now));
     assert.equal(result.filePermissionKey!, defaultDirCreateResp.filePermissionKey!);
     assert.ok(result.fileChangeOn!);
     assert.ok(result.fileId!);
@@ -144,6 +146,7 @@ describe("FileClient", () => {
     assert.ok(respFileAttributes.temporary);
     assert.equal(truncatedISO8061Date(properties.fileCreatedOn!), truncatedISO8061Date(now));
     assert.equal(truncatedISO8061Date(properties.fileLastWriteOn!), truncatedISO8061Date(now));
+    assert.equal(truncatedISO8061Date(result.fileChangeOn!), truncatedISO8061Date(now));
     assert.equal(properties.filePermissionKey!, defaultDirCreateResp.filePermissionKey!);
     assert.ok(properties.fileChangeOn!);
     assert.ok(properties.fileId!);
@@ -206,6 +209,7 @@ describe("FileClient", () => {
       },
       creationTime: now,
       lastWriteTime: now,
+      changeOn: now,
       filePermission: getPermissionResp.permission,
       fileAttributes: fullFileAttributes,
     };
@@ -226,6 +230,7 @@ describe("FileClient", () => {
     assert.ok(respFileAttributes.temporary);
     assert.equal(truncatedISO8061Date(result.fileCreatedOn!), truncatedISO8061Date(now));
     assert.equal(truncatedISO8061Date(result.fileLastWriteOn!), truncatedISO8061Date(now));
+    assert.equal(truncatedISO8061Date(result.fileChangeOn!), truncatedISO8061Date(now));
     assert.ok(result.filePermissionKey!);
     assert.ok(result.fileChangeOn!);
     assert.ok(result.fileId!);
@@ -394,6 +399,8 @@ describe("FileClient", () => {
 
     const fileCreationDate = new Date("05 October 2011 14:48 UTC");
     const fileCreationTime = truncatedISO8061Date(fileCreationDate);
+    const fileChangeDate = new Date("05 October 2011 14:48 UTC");
+    const fileChangeTime = truncatedISO8061Date(fileChangeDate);
     const options: FileStartCopyOptions = {
       filePermission: filePermissionInSDDL,
       copyFileSmbInfo: {
@@ -402,6 +409,7 @@ describe("FileClient", () => {
         fileAttributes,
         fileCreationTime,
         fileLastWriteTime: "source",
+        fileChangeTime,
         setArchiveAttribute: false,
       },
     };
@@ -417,6 +425,7 @@ describe("FileClient", () => {
     );
     assert.deepStrictEqual(targetProperties.fileLastWriteOn, sourceProperties.fileLastWriteOn);
     assert.deepStrictEqual(targetProperties.fileCreatedOn, fileCreationDate);
+    assert.deepStrictEqual(targetProperties.fileChangeOn, fileChangeDate);
   });
 
   it("startCopyFromURL with smb options: filePermissionKey", async () => {
@@ -558,6 +567,25 @@ describe("FileClient", () => {
     assert.deepStrictEqual(await bodyToString(response), "HelloWorld");
   });
 
+  it.only("uploadRange with lastWriteTime", async () => {
+    const createResult = await fileClient.create(10);
+
+    const uploadRangeResult = await fileClient.uploadRange("Hello", 0, 5, {
+      fileLastWrittenMode: "Preserve",
+    });
+    assert.deepStrictEqual(
+      uploadRangeResult.fileLastWriteTime,
+      createResult.fileLastWriteOn,
+      "Last write time should be expected"
+    );
+
+    await fileClient.uploadRange("World", 5, 5, {
+      fileLastWrittenMode: "Now",
+    });
+    const response = await fileClient.download(0, 8);
+    assert.deepStrictEqual(await bodyToString(response, 8), "HelloWor");
+  });
+
   it("clearRange", async () => {
     await fileClient.create(10);
     await fileClient.uploadRange("Hello", 0, 5);
@@ -566,6 +594,28 @@ describe("FileClient", () => {
 
     const result = await fileClient.download();
     assert.deepStrictEqual(await bodyToString(result, 10), "H" + "\u0000".repeat(8) + "d");
+  });
+
+  it.only("clearRange with lastWriteTime", async () => {
+    await fileClient.create(10);
+    await fileClient.uploadRange("Hello", 0, 5);
+    const uploadRangeResult = await fileClient.uploadRange("World", 5, 5);
+    const clearRangeResult = await fileClient.clearRange(1, 4, {
+      fileLastWrittenMode: "Preserve",
+    });
+    assert.deepStrictEqual(
+      uploadRangeResult.fileLastWriteTime,
+      clearRangeResult.fileLastWriteTime,
+      "File last write time should be expected"
+    );
+    const result = await fileClient.download();
+    assert.deepStrictEqual(await bodyToString(result, 10), "H" + "\u0000".repeat(4) + "World");
+
+    await fileClient.clearRange(5, 4, {
+      fileLastWrittenMode: "Now",
+    });
+    const downloadResult2 = await fileClient.download();
+    assert.deepStrictEqual(await bodyToString(downloadResult2, 10), "H" + "\u0000".repeat(8) + "d");
   });
 
   it("getRangeList", async () => {
