@@ -520,6 +520,7 @@ export type FileAttributesPreserveType = "preserve";
 // @public
 export interface FileClearRangeOptions extends CommonOptions {
     abortSignal?: AbortSignalLike;
+    lastWriteTime?: Date | TimeNowType;
     leaseAccessConditions?: LeaseAccessConditions;
 }
 
@@ -1072,6 +1073,7 @@ export interface FileUploadRangeFromURLHeaders {
     date?: Date;
     errorCode?: string;
     etag?: string;
+    fileLastWriteTime?: Date;
     isServerEncrypted?: boolean;
     lastModified?: Date;
     requestId?: string;
@@ -1082,6 +1084,7 @@ export interface FileUploadRangeFromURLHeaders {
 // @public
 export interface FileUploadRangeFromURLOptionalParams extends coreHttp.OperationOptions {
     copySourceAuthorization?: string;
+    fileLastWriteOn?: string;
     leaseAccessConditions?: LeaseAccessConditions;
     sourceContentCrc64?: Uint8Array;
     sourceModifiedAccessConditions?: SourceModifiedAccessConditions;
@@ -1092,6 +1095,7 @@ export interface FileUploadRangeFromURLOptionalParams extends coreHttp.Operation
 // @public
 export interface FileUploadRangeFromURLOptions extends CommonOptions {
     abortSignal?: AbortSignalLike;
+    lastWriteTime?: Date | TimeNowType;
     leaseAccessConditions?: LeaseAccessConditions;
     sourceAuthorization?: HttpAuthorization;
     sourceConditions?: SourceModifiedAccessConditions;
@@ -1112,6 +1116,7 @@ export interface FileUploadRangeHeaders {
     date?: Date;
     errorCode?: string;
     etag?: string;
+    fileLastWriteTime?: Date;
     isServerEncrypted?: boolean;
     lastModified?: Date;
     requestId?: string;
@@ -1122,6 +1127,7 @@ export interface FileUploadRangeHeaders {
 export interface FileUploadRangeOptions extends CommonOptions {
     abortSignal?: AbortSignalLike;
     contentMD5?: Uint8Array;
+    lastWriteTime?: Date | TimeNowType;
     leaseAccessConditions?: LeaseAccessConditions;
     onProgress?: (progress: TransferProgressEvent) => void;
 }

@@ -49,6 +49,7 @@ export const HeaderConstants = {
 
 export const ETagNone = "";
 export const ETagAny = "*";
+export const FileAttributesPreserve = "preserve";
 
 export const StorageFileLoggingAllowedHeaderNames = [
   "Access-Control-Allow-Origin",

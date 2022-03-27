@@ -1301,6 +1301,8 @@ export interface FileUploadRangeHeaders {
   date?: Date;
   /** The value of this header is set to true if the contents of the request are successfully encrypted using the specified algorithm, and false otherwise. */
   isServerEncrypted?: boolean;
+  /** Last write time for the file. */
+  fileLastWriteTime?: Date;
   /** Error Code */
   errorCode?: string;
 }
@@ -1326,6 +1328,8 @@ export interface FileUploadRangeFromURLHeaders {
   date?: Date;
   /** The value of this header is set to true if the contents of the request are successfully encrypted using the specified algorithm, and false otherwise. */
   isServerEncrypted?: boolean;
+  /** Last write time for the file. */
+  fileLastWriteTime?: Date;
   /** Error Code */
   errorCode?: string;
 }
@@ -2154,6 +2158,10 @@ export interface DirectoryCreateOptionalParams
   filePermission?: string;
   /** Key of the permission to be set for the directory/file. Note: Only one of the x-ms-file-permission or x-ms-file-permission-key should be specified. */
   filePermissionKey?: string;
+  /** Creation time for the file/directory. Default value: Now. */
+  fileCreatedOn?: string;
+  /** Last write time for the file/directory. Default value: Now. */
+  fileLastWriteOn?: string;
 }
 
 /** Contains response data for the create operation. */
@@ -2208,6 +2216,10 @@ export interface DirectorySetPropertiesOptionalParams
   filePermission?: string;
   /** Key of the permission to be set for the directory/file. Note: Only one of the x-ms-file-permission or x-ms-file-permission-key should be specified. */
   filePermissionKey?: string;
+  /** Creation time for the file/directory. Default value: Now. */
+  fileCreatedOn?: string;
+  /** Last write time for the file/directory. Default value: Now. */
+  fileLastWriteOn?: string;
 }
 
 /** Contains response data for the setProperties operation. */
@@ -2369,6 +2381,10 @@ export interface FileCreateOptionalParams extends coreHttp.OperationOptions {
   filePermission?: string;
   /** Key of the permission to be set for the directory/file. Note: Only one of the x-ms-file-permission or x-ms-file-permission-key should be specified. */
   filePermissionKey?: string;
+  /** Creation time for the file/directory. Default value: Now. */
+  fileCreatedOn?: string;
+  /** Last write time for the file/directory. Default value: Now. */
+  fileLastWriteOn?: string;
 }
 
 /** Contains response data for the create operation. */
@@ -2466,6 +2482,10 @@ export interface FileSetHttpHeadersOptionalParams
   filePermission?: string;
   /** Key of the permission to be set for the directory/file. Note: Only one of the x-ms-file-permission or x-ms-file-permission-key should be specified. */
   filePermissionKey?: string;
+  /** Creation time for the file/directory. Default value: Now. */
+  fileCreatedOn?: string;
+  /** Last write time for the file/directory. Default value: Now. */
+  fileLastWriteOn?: string;
   /** Resizes a file to the specified size. If the specified byte value is less than the current size of the file, then all ranges above the specified byte value are cleared. */
   fileContentLength?: number;
 }
@@ -2586,6 +2606,8 @@ export interface FileUploadRangeOptionalParams
   leaseAccessConditions?: LeaseAccessConditions;
   /** The timeout parameter is expressed in seconds. For more information, see <a href="https://docs.microsoft.com/en-us/rest/api/storageservices/Setting-Timeouts-for-File-Service-Operations?redirectedfrom=MSDN">Setting Timeouts for File Service Operations.</a> */
   timeoutInSeconds?: number;
+  /** Last write time for the file/directory. Default value: Now. */
+  fileLastWriteOn?: string;
   /** Initial data. */
   body?: coreHttp.HttpRequestBody;
   /** An MD5 hash of the content. This hash is used to verify the integrity of the data during transport. When the Content-MD5 header is specified, the File service compares the hash of the content that has arrived with the header value that was sent. If the two hashes do not match, the operation will fail with error code 400 (Bad Request). */
@@ -2610,6 +2632,8 @@ export interface FileUploadRangeFromURLOptionalParams
   sourceModifiedAccessConditions?: SourceModifiedAccessConditions;
   /** The timeout parameter is expressed in seconds. For more information, see <a href="https://docs.microsoft.com/en-us/rest/api/storageservices/Setting-Timeouts-for-File-Service-Operations?redirectedfrom=MSDN">Setting Timeouts for File Service Operations.</a> */
   timeoutInSeconds?: number;
+  /** Last write time for the file/directory. Default value: Now. */
+  fileLastWriteOn?: string;
   /** Bytes of source data in the specified range. */
   sourceRange?: string;
   /** Specify the crc64 calculated for the range of bytes that must be read from the copy source. */

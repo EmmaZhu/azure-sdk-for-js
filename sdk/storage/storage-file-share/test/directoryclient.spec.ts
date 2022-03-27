@@ -119,6 +119,7 @@ describe("DirectoryClient", () => {
     assert.ok(result.fileId!);
     assert.ok(result.fileParentId!);
   });
+
   it("create with all parameters configured setting filePermission", async () => {
     const getPermissionResp = await shareClient.getPermission(
       defaultDirCreateResp.filePermissionKey!

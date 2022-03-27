@@ -67,22 +67,16 @@ export class File {
    * @param fileContentLength Specifies the maximum size for the file, up to 4 TB.
    * @param fileAttributes If specified, the provided file attributes shall be set. Default value:
    *                       ‘Archive’ for file and ‘Directory’ for directory. ‘None’ can also be specified as default.
-   * @param fileCreatedOn Creation time for the file/directory. Default value: Now.
-   * @param fileLastWriteOn Last write time for the file/directory. Default value: Now.
    * @param options The options parameters.
    */
   create(
     fileContentLength: number,
     fileAttributes: string,
-    fileCreatedOn: string,
-    fileLastWriteOn: string,
     options?: FileCreateOptionalParams
   ): Promise<FileCreateResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       fileContentLength,
       fileAttributes,
-      fileCreatedOn,
-      fileLastWriteOn,
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
     };
     return this.client.sendOperationRequest(
@@ -142,20 +136,14 @@ export class File {
    * Sets HTTP headers on the file.
    * @param fileAttributes If specified, the provided file attributes shall be set. Default value:
    *                       ‘Archive’ for file and ‘Directory’ for directory. ‘None’ can also be specified as default.
-   * @param fileCreatedOn Creation time for the file/directory. Default value: Now.
-   * @param fileLastWriteOn Last write time for the file/directory. Default value: Now.
    * @param options The options parameters.
    */
   setHttpHeaders(
     fileAttributes: string,
-    fileCreatedOn: string,
-    fileLastWriteOn: string,
     options?: FileSetHttpHeadersOptionalParams
   ): Promise<FileSetHttpHeadersResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       fileAttributes,
-      fileCreatedOn,
-      fileLastWriteOn,
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
     };
     return this.client.sendOperationRequest(
@@ -726,6 +714,7 @@ const uploadRangeOperationSpec: coreHttp.OperationSpec = {
   headerParameters: [
     Parameters.version,
     Parameters.leaseId,
+    Parameters.fileLastWriteOn,
     Parameters.contentType1,
     Parameters.accept3,
     Parameters.range1,
@@ -755,6 +744,7 @@ const uploadRangeFromURLOperationSpec: coreHttp.OperationSpec = {
     Parameters.version,
     Parameters.accept1,
     Parameters.leaseId,
+    Parameters.fileLastWriteOn,
     Parameters.range1,
     Parameters.contentLength,
     Parameters.copySource,

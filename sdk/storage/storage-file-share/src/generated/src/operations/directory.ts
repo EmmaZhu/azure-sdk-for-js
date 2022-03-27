@@ -47,20 +47,14 @@ export class Directory {
    * Creates a new directory under the specified share or parent directory.
    * @param fileAttributes If specified, the provided file attributes shall be set. Default value:
    *                       ‘Archive’ for file and ‘Directory’ for directory. ‘None’ can also be specified as default.
-   * @param fileCreatedOn Creation time for the file/directory. Default value: Now.
-   * @param fileLastWriteOn Last write time for the file/directory. Default value: Now.
    * @param options The options parameters.
    */
   create(
     fileAttributes: string,
-    fileCreatedOn: string,
-    fileLastWriteOn: string,
     options?: DirectoryCreateOptionalParams
   ): Promise<DirectoryCreateResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       fileAttributes,
-      fileCreatedOn,
-      fileLastWriteOn,
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
     };
     return this.client.sendOperationRequest(
@@ -108,20 +102,14 @@ export class Directory {
    * Sets properties on the directory.
    * @param fileAttributes If specified, the provided file attributes shall be set. Default value:
    *                       ‘Archive’ for file and ‘Directory’ for directory. ‘None’ can also be specified as default.
-   * @param fileCreatedOn Creation time for the file/directory. Default value: Now.
-   * @param fileLastWriteOn Last write time for the file/directory. Default value: Now.
    * @param options The options parameters.
    */
   setProperties(
     fileAttributes: string,
-    fileCreatedOn: string,
-    fileLastWriteOn: string,
     options?: DirectorySetPropertiesOptionalParams
   ): Promise<DirectorySetPropertiesResponse> {
     const operationArguments: coreHttp.OperationArguments = {
       fileAttributes,
-      fileCreatedOn,
-      fileLastWriteOn,
       options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
     };
     return this.client.sendOperationRequest(

@@ -100,7 +100,7 @@ export const timeoutInSeconds: OperationQueryParameter = {
 export const version: OperationParameter = {
   parameterPath: "version",
   mapper: {
-    defaultValue: "2021-04-10",
+    defaultValue: "2021-06-08",
     isConstant: true,
     serializedName: "x-ms-version",
     type: {
@@ -613,10 +613,9 @@ export const fileAttributes: OperationParameter = {
 };
 
 export const fileCreatedOn: OperationParameter = {
-  parameterPath: "fileCreatedOn",
+  parameterPath: ["options", "fileCreatedOn"],
   mapper: {
     serializedName: "x-ms-file-creation-time",
-    required: true,
     xmlName: "x-ms-file-creation-time",
     type: {
       name: "String"
@@ -625,10 +624,9 @@ export const fileCreatedOn: OperationParameter = {
 };
 
 export const fileLastWriteOn: OperationParameter = {
-  parameterPath: "fileLastWriteOn",
+  parameterPath: ["options", "fileLastWriteOn"],
   mapper: {
     serializedName: "x-ms-file-last-write-time",
-    required: true,
     xmlName: "x-ms-file-last-write-time",
     type: {
       name: "String"

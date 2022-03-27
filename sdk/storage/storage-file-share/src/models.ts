@@ -290,11 +290,15 @@ export function fileAttributesToString(
     : fileAttributes;
 }
 
-export function fileCreationTimeToString(time: Date | TimeNowType | TimePreserveType): string {
+export function fileCreationTimeToString(
+  time: Date | TimeNowType | TimePreserveType | undefined
+): string | undefined {
   return time instanceof Date ? truncatedISO8061Date(time) : time;
 }
 
-export function fileLastWriteTimeToString(time: Date | TimeNowType | TimePreserveType): string {
+export function fileLastWriteTimeToString(
+  time: Date | TimeNowType | TimePreserveType | undefined
+): string | undefined {
   return time instanceof Date ? truncatedISO8061Date(time) : time;
 }
 

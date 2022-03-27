@@ -558,6 +558,25 @@ describe("FileClient", () => {
     assert.deepStrictEqual(await bodyToString(response), "HelloWorld");
   });
 
+  it.only("uploadRange with lastWriteTime", async () => {
+    const createResult = await fileClient.create(10);
+
+    const uploadRangeResult = await fileClient.uploadRange("Hello", 0, 5, {
+      lastWriteTime: "preserve",
+    });
+    assert.deepStrictEqual(
+      uploadRangeResult.fileLastWriteTime,
+      createResult.fileLastWriteOn,
+      "Last write time should be expected"
+    );
+
+    await fileClient.uploadRange("World", 5, 5, {
+      lastWriteTime: "now",
+    });
+    const response = await fileClient.download(0, 8);
+    assert.deepStrictEqual(await bodyToString(response, 8), "HelloWor");
+  });
+
   it("clearRange", async () => {
     await fileClient.create(10);
     await fileClient.uploadRange("Hello", 0, 5);
@@ -566,6 +585,28 @@ describe("FileClient", () => {
 
     const result = await fileClient.download();
     assert.deepStrictEqual(await bodyToString(result, 10), "H" + "\u0000".repeat(8) + "d");
+  });
+
+  it.only("clearRange with lastWriteTime", async () => {
+    await fileClient.create(10);
+    await fileClient.uploadRange("Hello", 0, 5);
+    const uploadRangeResult = await fileClient.uploadRange("World", 5, 5);
+    const clearRangeResult = await fileClient.clearRange(1, 4, {
+      lastWriteTime: "preserve",
+    });
+    assert.deepStrictEqual(
+      uploadRangeResult.fileLastWriteTime,
+      clearRangeResult.fileLastWriteTime,
+      "File last write time should be expected"
+    );
+    const result = await fileClient.download();
+    assert.deepStrictEqual(await bodyToString(result, 10), "H" + "\u0000".repeat(4) + "World");
+
+    await fileClient.clearRange(5, 4, {
+      lastWriteTime: "now",
+    });
+    const downloadResult2 = await fileClient.download();
+    assert.deepStrictEqual(await bodyToString(downloadResult2, 10), "H" + "\u0000".repeat(8) + "d");
   });
 
   it("getRangeList", async () => {

@@ -34,7 +34,7 @@ export function getGenericBSU(
     // Enable logger when debugging
     // logger: new ConsoleHttpPipelineLogger(HttpPipelineLogLevel.INFO)
   });
-  const filePrimaryURL = `https://${accountName}${accountNameSuffix}.file.core.windows.net${accountSAS}`;
+  const filePrimaryURL = `https://${accountName}${accountNameSuffix}.file.preprod.core.windows.net${accountSAS}`;
   return new ShareServiceClient(filePrimaryURL, pipeline);
 }
 
