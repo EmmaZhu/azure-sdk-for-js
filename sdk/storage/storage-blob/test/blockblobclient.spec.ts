@@ -38,7 +38,7 @@ describe("BlockBlobClient", () => {
   });
 
   afterEach(async function (this: Context) {
-    if (!this.currentTest?.isPending()) {
+    if (!(this.currentTest && this.currentTest.isPending())) {
       await containerClient.delete();
       await recorder.stop();
     }

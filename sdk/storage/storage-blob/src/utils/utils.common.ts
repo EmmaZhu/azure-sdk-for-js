@@ -812,12 +812,14 @@ export function ConvertInternalResponseOfListBlobHierarchy(
   return {
     ...internalResponse,
     segment: {
-      blobPrefixes: internalResponse.segment.blobPrefixes?.map((blobPrefixInternal) => {
-        const blobPrefix: BlobPrefixModel = {
-          name: BlobNameToString(blobPrefixInternal.name),
-        };
-        return blobPrefix;
-      }),
+      blobPrefixes: internalResponse.segment.blobPrefixes
+        ? internalResponse.segment.blobPrefixes.map((blobPrefixInternal) => {
+            const blobPrefix: BlobPrefixModel = {
+              name: BlobNameToString(blobPrefixInternal.name),
+            };
+            return blobPrefix;
+          })
+        : undefined,
       blobItems: internalResponse.segment.blobItems.map((blobItemInteral) => {
         const blobItem: BlobItemInternalModel = {
           ...blobItemInteral,

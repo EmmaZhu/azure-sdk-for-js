@@ -632,7 +632,7 @@ export class BlobServiceClient extends StorageClient {
       const containerContext = new Container(containerClient["storageClientContext"]);
       const containerRenameResponse = await containerContext.rename(sourceContainerName, {
         ...updatedOptions,
-        sourceLeaseId: options.sourceCondition?.leaseId,
+        sourceLeaseId: options.sourceCondition ? options.sourceCondition.leaseId : undefined,
       });
       return { containerClient, containerRenameResponse };
     } catch (e: any) {
@@ -844,7 +844,7 @@ export class BlobServiceClient extends StorageClient {
         _response: response._response, // _response is made non-enumerable
         blobs: response.blobs.map((blob) => {
           let tagValue = "";
-          if (blob.tags?.blobTagSet.length === 1) {
+          if (blob.tags && blob.tags.blobTagSet.length === 1) {
             tagValue = blob.tags.blobTagSet[0].value;
           }
           return { ...blob, tags: toTags(blob.tags), tagValue };

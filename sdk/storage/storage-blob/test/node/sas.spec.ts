@@ -2662,7 +2662,7 @@ describe("Shared Access Signature (SAS) generation Node.js Only - ImmutabilityPo
   });
 
   afterEach(async function (this: Context) {
-    if (!this.currentTest?.isPending()) {
+    if (!(this.currentTest && this.currentTest.isPending())) {
       const listResult = (
         await containerClient
           .listBlobsFlat({

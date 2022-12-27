@@ -55,7 +55,7 @@ describe("BlobClient", () => {
   });
 
   afterEach(async function (this: Context) {
-    if (!this.currentTest?.isPending()) {
+    if (!(this.currentTest && this.currentTest.isPending())) {
       await containerClient.delete();
       await recorder.stop();
     }
@@ -935,7 +935,7 @@ describe("BlobClient", () => {
       try {
         await promise;
       } catch (e: any) {
-        assert.equal(e.details?.errorCode, errorCode);
+        assert.equal(e.details ? e.details.errorCode : undefined, errorCode);
         expectedExceptionCaught = true;
       }
       return expectedExceptionCaught;
@@ -1172,22 +1172,22 @@ describe("BlobClient", () => {
       await blockBlobClient.upload(content, content.length, { conditions: tagConditionMet });
     });
 
-    it("BlockBlobClient.commitBlockList", async () => {
-      const body = "HelloWorld";
-      await blockBlobClient.stageBlock(base64encode("1"), body, body.length);
-      await blockBlobClient.stageBlock(base64encode("2"), body, body.length);
+    it.only("BlockBlobClient.commitBlockList", async () => {
+      // const crc64 = new StorageCrc64Calculator();
 
-      assert.ok(
-        await throwExpectedError(
-          blockBlobClient.commitBlockList([base64encode("1"), base64encode("2")], {
-            conditions: tagConditionUnmet,
-          }),
-          "ConditionNotMet"
-        )
-      );
-      await blockBlobClient.commitBlockList([base64encode("1"), base64encode("2")], {
-        conditions: tagConditionMet,
-      });
+      // const buffer = new Uint8Array(4194304);
+      // for (let i = 0; i < 4194304; ++i)
+      // {
+      //   buffer[i] = i;
+      // }
+
+      const start = Date.now();
+      // for (let i = 0; i < 1; ++i) {
+      //   const result = await crc64.getCRC64Hash(buffer);
+      //   console.log(result);
+      // }
+      const end = Date.now();
+      console.log(end - start);
     });
 
     it("BlockBlobClient.getBlockList", async () => {
@@ -1559,7 +1559,7 @@ describe("BlobClient - ImmutabilityPolicy", () => {
   });
 
   afterEach(async function (this: Context) {
-    if (!this.currentTest?.isPending()) {
+    if (!(this.currentTest && this.currentTest.isPending())) {
       const listResult = (await containerClient.listBlobsFlat().byPage().next()).value;
 
       for (let i = 0; i < listResult.segment.blobItems!.length; ++i) {

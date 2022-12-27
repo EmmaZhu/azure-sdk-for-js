@@ -167,9 +167,10 @@ export class BlobLeaseClient {
 
     if (
       this._isContainer &&
-      ((options.conditions?.ifMatch && options.conditions?.ifMatch !== ETagNone) ||
-        (options.conditions?.ifNoneMatch && options.conditions?.ifNoneMatch !== ETagNone) ||
-        options.conditions?.tagConditions)
+      options.conditions &&
+      ((options.conditions.ifMatch && options.conditions.ifMatch !== ETagNone) ||
+        (options.conditions.ifNoneMatch && options.conditions.ifNoneMatch !== ETagNone) ||
+        options.conditions.tagConditions)
     ) {
       throw new RangeError(
         "The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable."
@@ -182,7 +183,7 @@ export class BlobLeaseClient {
         duration,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         proposedLeaseId: this._leaseId,
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -216,9 +217,10 @@ export class BlobLeaseClient {
 
     if (
       this._isContainer &&
-      ((options.conditions?.ifMatch && options.conditions?.ifMatch !== ETagNone) ||
-        (options.conditions?.ifNoneMatch && options.conditions?.ifNoneMatch !== ETagNone) ||
-        options.conditions?.tagConditions)
+      options.conditions &&
+      ((options.conditions.ifMatch && options.conditions.ifMatch !== ETagNone) ||
+        (options.conditions.ifNoneMatch && options.conditions.ifNoneMatch !== ETagNone) ||
+        options.conditions.tagConditions)
     ) {
       throw new RangeError(
         "The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable."
@@ -233,7 +235,7 @@ export class BlobLeaseClient {
           abortSignal: options.abortSignal,
           modifiedAccessConditions: {
             ...options.conditions,
-            ifTags: options.conditions?.tagConditions,
+            ifTags: options.conditions ? options.conditions.tagConditions : undefined,
           },
           ...convertTracingToRequestOptionsBase(updatedOptions),
         }
@@ -266,9 +268,10 @@ export class BlobLeaseClient {
 
     if (
       this._isContainer &&
-      ((options.conditions?.ifMatch && options.conditions?.ifMatch !== ETagNone) ||
-        (options.conditions?.ifNoneMatch && options.conditions?.ifNoneMatch !== ETagNone) ||
-        options.conditions?.tagConditions)
+      options.conditions &&
+      ((options.conditions.ifMatch && options.conditions.ifMatch !== ETagNone) ||
+        (options.conditions.ifNoneMatch && options.conditions.ifNoneMatch !== ETagNone) ||
+        options.conditions.tagConditions)
     ) {
       throw new RangeError(
         "The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable."
@@ -280,7 +283,7 @@ export class BlobLeaseClient {
         abortSignal: options.abortSignal,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -309,9 +312,10 @@ export class BlobLeaseClient {
 
     if (
       this._isContainer &&
-      ((options.conditions?.ifMatch && options.conditions?.ifMatch !== ETagNone) ||
-        (options.conditions?.ifNoneMatch && options.conditions?.ifNoneMatch !== ETagNone) ||
-        options.conditions?.tagConditions)
+      options.conditions &&
+      ((options.conditions.ifMatch && options.conditions.ifMatch !== ETagNone) ||
+        (options.conditions.ifNoneMatch && options.conditions.ifNoneMatch !== ETagNone) ||
+        options.conditions.tagConditions)
     ) {
       throw new RangeError(
         "The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable."
@@ -323,7 +327,7 @@ export class BlobLeaseClient {
         abortSignal: options.abortSignal,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -357,9 +361,10 @@ export class BlobLeaseClient {
 
     if (
       this._isContainer &&
-      ((options.conditions?.ifMatch && options.conditions?.ifMatch !== ETagNone) ||
-        (options.conditions?.ifNoneMatch && options.conditions?.ifNoneMatch !== ETagNone) ||
-        options.conditions?.tagConditions)
+      options.conditions &&
+      ((options.conditions.ifMatch && options.conditions.ifMatch !== ETagNone) ||
+        (options.conditions.ifNoneMatch && options.conditions.ifNoneMatch !== ETagNone) ||
+        options.conditions.tagConditions)
     ) {
       throw new RangeError(
         "The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable."
@@ -372,7 +377,7 @@ export class BlobLeaseClient {
         breakPeriod,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       };

@@ -571,7 +571,7 @@ describe("BlobClient Node.js only", () => {
         conditions: { tagConditions: "tag = 'val1'" },
       });
     } catch (e: any) {
-      assert.equal(e.details?.errorCode, "ConditionNotMet");
+      assert.equal(e.details ? e.details.errorCode : undefined, "ConditionNotMet");
       exceptionCaught = true;
     }
     assert.ok(exceptionCaught);
@@ -935,7 +935,7 @@ describe("BlobClient Node.js Only - ImmutabilityPolicy", () => {
   });
 
   afterEach(async function (this: Context) {
-    if (!this.currentTest?.isPending()) {
+    if (!(this.currentTest && this.currentTest.isPending())) {
       const listResult = (
         await containerClient
           .listBlobsFlat({

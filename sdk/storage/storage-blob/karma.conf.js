@@ -129,7 +129,7 @@ module.exports = function (config) {
     concurrency: 1,
 
     browserNoActivityTimeout: 1200000,
-    browserDisconnectTimeout: 10000,
+    browserDisconnectTimeout: 1200000,
     browserDisconnectTolerance: 3,
     browserConsoleLogOptions: {
       terminal: !isRecordMode(),

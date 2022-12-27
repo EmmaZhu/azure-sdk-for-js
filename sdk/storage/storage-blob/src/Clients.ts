@@ -1170,7 +1170,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         requestOptions: {
           onDownloadProgress: isNode ? undefined : options.onProgress, // for Node.js, progress is reported by RetriableReadableStream
@@ -1222,7 +1222,7 @@ export class BlobClient extends StorageClient {
               ifModifiedSince: options.conditions!.ifModifiedSince,
               ifNoneMatch: options.conditions!.ifNoneMatch,
               ifUnmodifiedSince: options.conditions!.ifUnmodifiedSince,
-              ifTags: options.conditions?.tagConditions,
+              ifTags: options.conditions ? options.conditions.tagConditions : undefined,
             },
             range: rangeToString({
               count: offset + res.contentLength! - start,
@@ -1333,7 +1333,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -1375,7 +1375,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -1411,14 +1411,14 @@ export class BlobClient extends StorageClient {
         _response: res._response, // _response is made non-enumerable
       };
     } catch (e: any) {
-      if (e.details?.errorCode === "BlobNotFound") {
+      if (e.details && e.details.errorCode === "BlobNotFound") {
         span.setStatus({
           code: SpanStatusCode.ERROR,
           message: "Expected exception when deleting a blob or snapshot only if it exists.",
         });
         return {
           succeeded: false,
-          ...e.response?.parsedHeaders,
+          ...e.response.parsedHeaders,
           _response: e.response,
         };
       }
@@ -1487,7 +1487,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         // cpkInfo: options.customerProvidedKey, // CPK is not included in Swagger, should change this back when this issue is fixed in Swagger.
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -1528,7 +1528,7 @@ export class BlobClient extends StorageClient {
         metadata,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
@@ -1562,7 +1562,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
         tags: toBlobTags(tags),
@@ -1591,7 +1591,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -1641,7 +1641,7 @@ export class BlobClient extends StorageClient {
         metadata: options.metadata,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
@@ -1813,7 +1813,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         sourceModifiedAccessConditions: {
           sourceIfMatch: options.sourceConditions.ifMatch,
@@ -1824,8 +1824,12 @@ export class BlobClient extends StorageClient {
         sourceContentMD5: options.sourceContentMD5,
         copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
         blobTagsString: toBlobTagsString(options.tags),
-        immutabilityPolicyExpiry: options.immutabilityPolicy?.expiriesOn,
-        immutabilityPolicyMode: options.immutabilityPolicy?.policyMode,
+        immutabilityPolicyExpiry: options.immutabilityPolicy
+          ? options.immutabilityPolicy.expiriesOn
+          : undefined,
+        immutabilityPolicyMode: options.immutabilityPolicy
+          ? options.immutabilityPolicy.policyMode
+          : undefined,
         legalHold: options.legalHold,
         encryptionScope: options.encryptionScope,
         copySourceTags: options.copySourceTags,
@@ -1864,7 +1868,7 @@ export class BlobClient extends StorageClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         rehydratePriority: options.rehydratePriority,
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -2175,7 +2179,7 @@ export class BlobClient extends StorageClient {
         metadata: options.metadata,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         sourceModifiedAccessConditions: {
           sourceIfMatch: options.sourceConditions.ifMatch,
@@ -2184,8 +2188,12 @@ export class BlobClient extends StorageClient {
           sourceIfUnmodifiedSince: options.sourceConditions.ifUnmodifiedSince,
           sourceIfTags: options.sourceConditions.tagConditions,
         },
-        immutabilityPolicyExpiry: options.immutabilityPolicy?.expiriesOn,
-        immutabilityPolicyMode: options.immutabilityPolicy?.policyMode,
+        immutabilityPolicyExpiry: options.immutabilityPolicy
+          ? options.immutabilityPolicy.expiriesOn
+          : undefined,
+        immutabilityPolicyMode: options.immutabilityPolicy
+          ? options.immutabilityPolicy.policyMode
+          : undefined,
         legalHold: options.legalHold,
         rehydratePriority: options.rehydratePriority,
         tier: toAccessTier(options.tier),
@@ -2249,7 +2257,7 @@ export class BlobClient extends StorageClient {
     const { span, updatedOptions } = createSpan("BlobClient-deleteImmutabilityPolicy", options);
     try {
       return await this.blobContext.deleteImmutabilityPolicy({
-        abortSignal: options?.abortSignal,
+        abortSignal: options ? options.abortSignal : undefined,
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
     } catch (e: any) {
@@ -2275,10 +2283,10 @@ export class BlobClient extends StorageClient {
     const { span, updatedOptions } = createSpan("BlobClient-setImmutabilityPolicy", options);
     try {
       return await this.blobContext.setImmutabilityPolicy({
-        abortSignal: options?.abortSignal,
+        abortSignal: options ? options.abortSignal : undefined,
         immutabilityPolicyExpiry: immutabilityPolicy.expiriesOn,
         immutabilityPolicyMode: immutabilityPolicy.policyMode,
-        modifiedAccessConditions: options?.modifiedAccessCondition,
+        modifiedAccessConditions: options ? options.modifiedAccessCondition : undefined,
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
     } catch (e: any) {
@@ -2304,7 +2312,7 @@ export class BlobClient extends StorageClient {
     const { span, updatedOptions } = createSpan("BlobClient-setLegalHold", options);
     try {
       return await this.blobContext.setLegalHold(legalHoldEnabled, {
-        abortSignal: options?.abortSignal,
+        abortSignal: options ? options.abortSignal : undefined,
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
     } catch (e: any) {
@@ -2746,12 +2754,16 @@ export class AppendBlobClient extends BlobClient {
         metadata: options.metadata,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
-        immutabilityPolicyExpiry: options.immutabilityPolicy?.expiriesOn,
-        immutabilityPolicyMode: options.immutabilityPolicy?.policyMode,
+        immutabilityPolicyExpiry: options.immutabilityPolicy
+          ? options.immutabilityPolicy.expiriesOn
+          : undefined,
+        immutabilityPolicyMode: options.immutabilityPolicy
+          ? options.immutabilityPolicy.policyMode
+          : undefined,
         legalHold: options.legalHold,
         blobTagsString: toBlobTagsString(options.tags),
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -2790,14 +2802,14 @@ export class AppendBlobClient extends BlobClient {
         _response: res._response, // _response is made non-enumerable
       };
     } catch (e: any) {
-      if (e.details?.errorCode === "BlobAlreadyExists") {
+      if (e.details && e.details.errorCode === "BlobAlreadyExists") {
         span.setStatus({
           code: SpanStatusCode.ERROR,
           message: "Expected exception when creating a blob only if it does not already exist.",
         });
         return {
           succeeded: false,
-          ...e.response?.parsedHeaders,
+          ...e.response.parsedHeaders,
           _response: e.response,
         };
       }
@@ -2827,7 +2839,7 @@ export class AppendBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -2882,7 +2894,7 @@ export class AppendBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         requestOptions: {
           onUploadProgress: options.onProgress,
@@ -2939,7 +2951,7 @@ export class AppendBlobClient extends BlobClient {
         appendPositionAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         sourceModifiedAccessConditions: {
           sourceIfMatch: options.sourceConditions.ifMatch,
@@ -3786,7 +3798,7 @@ export class BlockBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -3850,15 +3862,19 @@ export class BlockBlobClient extends BlobClient {
         metadata: options.metadata,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         requestOptions: {
           onUploadProgress: options.onProgress,
         },
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
-        immutabilityPolicyExpiry: options.immutabilityPolicy?.expiriesOn,
-        immutabilityPolicyMode: options.immutabilityPolicy?.policyMode,
+        immutabilityPolicyExpiry: options.immutabilityPolicy
+          ? options.immutabilityPolicy.expiriesOn
+          : undefined,
+        immutabilityPolicyMode: options.immutabilityPolicy
+          ? options.immutabilityPolicy.policyMode
+          : undefined,
         legalHold: options.legalHold,
         tier: toAccessTier(options.tier),
         blobTagsString: toBlobTagsString(options.tags),
@@ -3911,11 +3927,19 @@ export class BlockBlobClient extends BlobClient {
           ifTags: options.conditions.tagConditions,
         },
         sourceModifiedAccessConditions: {
-          sourceIfMatch: options.sourceConditions?.ifMatch,
-          sourceIfModifiedSince: options.sourceConditions?.ifModifiedSince,
-          sourceIfNoneMatch: options.sourceConditions?.ifNoneMatch,
-          sourceIfUnmodifiedSince: options.sourceConditions?.ifUnmodifiedSince,
-          sourceIfTags: options.sourceConditions?.tagConditions,
+          sourceIfMatch: options.sourceConditions ? options.sourceConditions.ifMatch : undefined,
+          sourceIfModifiedSince: options.sourceConditions
+            ? options.sourceConditions.ifModifiedSince
+            : undefined,
+          sourceIfNoneMatch: options.sourceConditions
+            ? options.sourceConditions.ifNoneMatch
+            : undefined,
+          sourceIfUnmodifiedSince: options.sourceConditions
+            ? options.sourceConditions.ifUnmodifiedSince
+            : undefined,
+          sourceIfTags: options.sourceConditions
+            ? options.sourceConditions.tagConditions
+            : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization),
@@ -4060,12 +4084,16 @@ export class BlockBlobClient extends BlobClient {
           metadata: options.metadata,
           modifiedAccessConditions: {
             ...options.conditions,
-            ifTags: options.conditions?.tagConditions,
+            ifTags: options.conditions ? options.conditions.tagConditions : undefined,
           },
           cpkInfo: options.customerProvidedKey,
           encryptionScope: options.encryptionScope,
-          immutabilityPolicyExpiry: options.immutabilityPolicy?.expiriesOn,
-          immutabilityPolicyMode: options.immutabilityPolicy?.policyMode,
+          immutabilityPolicyExpiry: options.immutabilityPolicy
+            ? options.immutabilityPolicy.expiriesOn
+            : undefined,
+          immutabilityPolicyMode: options.immutabilityPolicy
+            ? options.immutabilityPolicy.policyMode
+            : undefined,
           legalHold: options.legalHold,
           tier: toAccessTier(options.tier),
           blobTagsString: toBlobTagsString(options.tags),
@@ -4104,7 +4132,7 @@ export class BlockBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -5096,12 +5124,16 @@ export class PageBlobClient extends BlobClient {
         metadata: options.metadata,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         cpkInfo: options.customerProvidedKey,
         encryptionScope: options.encryptionScope,
-        immutabilityPolicyExpiry: options.immutabilityPolicy?.expiriesOn,
-        immutabilityPolicyMode: options.immutabilityPolicy?.policyMode,
+        immutabilityPolicyExpiry: options.immutabilityPolicy
+          ? options.immutabilityPolicy.expiriesOn
+          : undefined,
+        immutabilityPolicyMode: options.immutabilityPolicy
+          ? options.immutabilityPolicy.policyMode
+          : undefined,
         legalHold: options.legalHold,
         tier: toAccessTier(options.tier),
         blobTagsString: toBlobTagsString(options.tags),
@@ -5145,14 +5177,14 @@ export class PageBlobClient extends BlobClient {
         _response: res._response, // _response is made non-enumerable
       };
     } catch (e: any) {
-      if (e.details?.errorCode === "BlobAlreadyExists") {
+      if (e.details && e.details.errorCode === "BlobAlreadyExists") {
         span.setStatus({
           code: SpanStatusCode.ERROR,
           message: "Expected exception when creating a blob only if it does not already exist.",
         });
         return {
           succeeded: false,
-          ...e.response?.parsedHeaders,
+          ...e.response.parsedHeaders,
           _response: e.response,
         };
       }
@@ -5192,7 +5224,7 @@ export class PageBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         requestOptions: {
           onUploadProgress: options.onProgress,
@@ -5252,7 +5284,7 @@ export class PageBlobClient extends BlobClient {
           sequenceNumberAccessConditions: options.conditions,
           modifiedAccessConditions: {
             ...options.conditions,
-            ifTags: options.conditions?.tagConditions,
+            ifTags: options.conditions ? options.conditions.tagConditions : undefined,
           },
           sourceModifiedAccessConditions: {
             sourceIfMatch: options.sourceConditions.ifMatch,
@@ -5299,7 +5331,7 @@ export class PageBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         range: rangeToString({ offset, count }),
         sequenceNumberAccessConditions: options.conditions,
@@ -5341,7 +5373,7 @@ export class PageBlobClient extends BlobClient {
           leaseAccessConditions: options.conditions,
           modifiedAccessConditions: {
             ...options.conditions,
-            ifTags: options.conditions?.tagConditions,
+            ifTags: options.conditions ? options.conditions.tagConditions : undefined,
           },
           range: rangeToString({ offset, count }),
           ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -5383,7 +5415,7 @@ export class PageBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         range: rangeToString({ offset, count }),
         marker: marker,
@@ -5588,7 +5620,7 @@ export class PageBlobClient extends BlobClient {
           leaseAccessConditions: options.conditions,
           modifiedAccessConditions: {
             ...options.conditions,
-            ifTags: options.conditions?.tagConditions,
+            ifTags: options.conditions ? options.conditions.tagConditions : undefined,
           },
           prevsnapshot: prevSnapshot,
           range: rangeToString({ offset, count }),
@@ -5630,11 +5662,15 @@ export class PageBlobClient extends BlobClient {
     const { span, updatedOptions } = createSpan("PageBlobClient-getPageRangesDiffSegment", options);
     try {
       return await this.pageBlobContext.getPageRangesDiff({
-        abortSignal: options?.abortSignal,
-        leaseAccessConditions: options?.conditions,
+        abortSignal: options ? options.abortSignal : undefined,
+        leaseAccessConditions: options ? options.conditions : undefined,
         modifiedAccessConditions: {
-          ...options?.conditions,
-          ifTags: options?.conditions?.tagConditions,
+          ...(options ? options.conditions : undefined),
+          ifTags: options
+            ? options.conditions
+              ? options.conditions.tagConditions
+              : undefined
+            : undefined,
         },
         prevsnapshot: prevSnapshotOrUrl,
         range: rangeToString({
@@ -5642,7 +5678,7 @@ export class PageBlobClient extends BlobClient {
           count: count,
         }),
         marker: marker,
-        maxPageSize: options?.maxPageSize,
+        maxPageSize: options ? options.maxPageSize : undefined,
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
     } catch (e: any) {
@@ -5864,7 +5900,7 @@ export class PageBlobClient extends BlobClient {
           leaseAccessConditions: options.conditions,
           modifiedAccessConditions: {
             ...options.conditions,
-            ifTags: options.conditions?.tagConditions,
+            ifTags: options.conditions ? options.conditions.tagConditions : undefined,
           },
           prevSnapshotUrl,
           range: rangeToString({ offset, count }),
@@ -5902,7 +5938,7 @@ export class PageBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         encryptionScope: options.encryptionScope,
         ...convertTracingToRequestOptionsBase(updatedOptions),
@@ -5941,7 +5977,7 @@ export class PageBlobClient extends BlobClient {
         leaseAccessConditions: options.conditions,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });
@@ -5979,7 +6015,7 @@ export class PageBlobClient extends BlobClient {
         abortSignal: options.abortSignal,
         modifiedAccessConditions: {
           ...options.conditions,
-          ifTags: options.conditions?.tagConditions,
+          ifTags: options.conditions ? options.conditions.tagConditions : undefined,
         },
         ...convertTracingToRequestOptionsBase(updatedOptions),
       });

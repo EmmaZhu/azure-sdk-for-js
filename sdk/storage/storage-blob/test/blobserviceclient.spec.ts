@@ -584,9 +584,15 @@ describe("BlobServiceClient", () => {
     });
 
     const staticWebsite = (await blobServiceClient.getProperties()).staticWebsite;
-    assert.ok(staticWebsite?.enabled);
-    assert.equal(staticWebsite?.errorDocument404Path, errorDocument404Path);
-    assert.equal(staticWebsite?.defaultIndexDocumentPath, defaultIndexDocumentPath);
+    assert.ok(staticWebsite && staticWebsite.enabled);
+    assert.equal(
+      staticWebsite ? staticWebsite.errorDocument404Path : undefined,
+      errorDocument404Path
+    );
+    assert.equal(
+      staticWebsite ? staticWebsite.defaultIndexDocumentPath : undefined,
+      defaultIndexDocumentPath
+    );
   });
 
   it("restore container", async function (this: Context) {

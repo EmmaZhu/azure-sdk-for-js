@@ -829,7 +829,7 @@ export class ContainerClient extends StorageClient {
         _response: res._response, // _response is made non-enumerable
       };
     } catch (e: any) {
-      if (e.details?.errorCode === "ContainerAlreadyExists") {
+      if (e.details && e.details.errorCode === "ContainerAlreadyExists") {
         span.setStatus({
           code: SpanStatusCode.ERROR,
           message:
@@ -837,7 +837,7 @@ export class ContainerClient extends StorageClient {
         });
         return {
           succeeded: false,
-          ...e.response?.parsedHeaders,
+          ...e.response.parsedHeaders,
           _response: e.response,
         };
       }
@@ -1024,14 +1024,14 @@ export class ContainerClient extends StorageClient {
         _response: res._response, // _response is made non-enumerable
       };
     } catch (e: any) {
-      if (e.details?.errorCode === "ContainerNotFound") {
+      if (e.details && e.details.errorCode === "ContainerNotFound") {
         span.setStatus({
           code: SpanStatusCode.ERROR,
           message: "Expected exception when deleting a container only if it exists.",
         });
         return {
           succeeded: false,
-          ...e.response?.parsedHeaders,
+          ...e.response.parsedHeaders,
           _response: e.response,
         };
       }
@@ -1417,12 +1417,14 @@ export class ContainerClient extends StorageClient {
             };
             return blobItem;
           }),
-          blobPrefixes: response.segment.blobPrefixes?.map((blobPrefixInternal) => {
-            const blobPrefix: BlobPrefix = {
-              name: BlobNameToString(blobPrefixInternal.name),
-            };
-            return blobPrefix;
-          }),
+          blobPrefixes: response.segment.blobPrefixes
+            ? response.segment.blobPrefixes.map((blobPrefixInternal) => {
+                const blobPrefix: BlobPrefix = {
+                  name: BlobNameToString(blobPrefixInternal.name),
+                };
+                return blobPrefix;
+              })
+            : undefined,
         },
       };
       return wrappedResponse;
@@ -1873,7 +1875,7 @@ export class ContainerClient extends StorageClient {
         _response: response._response, // _response is made non-enumerable
         blobs: response.blobs.map((blob) => {
           let tagValue = "";
-          if (blob.tags?.blobTagSet.length === 1) {
+          if (blob.tags && blob.tags.blobTagSet.length === 1) {
             tagValue = blob.tags.blobTagSet[0].value;
           }
           return { ...blob, tags: toTags(blob.tags), tagValue };

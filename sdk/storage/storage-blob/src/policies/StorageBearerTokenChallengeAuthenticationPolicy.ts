@@ -162,7 +162,7 @@ function createTokenCycler(
     get shouldRefresh(): boolean {
       return (
         !cycler.isRefreshing &&
-        (token?.expiresOnTimestamp ?? 0) - options.refreshWindowInMs < Date.now()
+        (token ? token.expiresOnTimestamp : 0) - options.refreshWindowInMs < Date.now()
       );
     },
     /**
@@ -192,7 +192,7 @@ function createTokenCycler(
         tryGetAccessToken,
         options.retryIntervalInMs,
         // If we don't have a token, then we should timeout immediately
-        token?.expiresOnTimestamp ?? Date.now()
+        token ? token.expiresOnTimestamp : Date.now()
       )
         .then((_token) => {
           refreshWorker = null;
@@ -310,7 +310,7 @@ export function storageBearerTokenChallengeAuthenticationPolicy(
 
       const response = await this._nextPolicy.sendRequest(webResource);
 
-      if (response?.status === 401) {
+      if (response.status === 401) {
         const challenge = getChallenge(response);
         if (challenge) {
           const challengeInfo: Challenge = parseChallenge(challenge);

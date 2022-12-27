@@ -488,7 +488,7 @@ describe("PageBlobClient Node.js only", () => {
       try {
         await promise;
       } catch (e: any) {
-        assert.equal(e.details?.errorCode, errorCode);
+        assert.equal(e.details ? e.details.errorCode : undefined, errorCode);
         expectedExceptionCaught = true;
       }
       return expectedExceptionCaught;
