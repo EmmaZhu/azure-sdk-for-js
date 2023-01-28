@@ -2875,6 +2875,9 @@ export class AppendBlobClient extends BlobClient {
     options.conditions = options.conditions || {};
     try {
       ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
+      // StorageCRC64Calculator.init();
+      // const cc = new StorageCRC64Calculator();
+      // cc.Final(new Uint8Array([]), 0);
 
       return await this.appendBlobContext.appendBlock(contentLength, body, {
         abortSignal: options.abortSignal,

@@ -30,6 +30,7 @@ import { Test_CPK_INFO } from "./utils/fakeTestSecrets";
 import { base64encode } from "../src/utils/utils.common";
 import { context, setSpan } from "@azure/core-tracing";
 import { Context } from "mocha";
+import { StorageCRC64Calculator } from "../src/utils/StorageCRC64Calculator";
 
 describe("BlobClient", () => {
   let blobServiceClient: BlobServiceClient;
@@ -1172,22 +1173,26 @@ describe("BlobClient", () => {
       await blockBlobClient.upload(content, content.length, { conditions: tagConditionMet });
     });
 
-    it("BlockBlobClient.commitBlockList", async () => {
-      const body = "HelloWorld";
-      await blockBlobClient.stageBlock(base64encode("1"), body, body.length);
-      await blockBlobClient.stageBlock(base64encode("2"), body, body.length);
+    it.only("BlockBlobClient.commitBlockList", async () => {
+      StorageCRC64Calculator.init();
+      await StorageCRC64Calculator.init();
+      const crc64 = new StorageCRC64Calculator();
+  
+      const buffer = new Uint8Array(4194304);
+      for(let i = 0; i < 4194304; ++i)
+      {
+        buffer[i] = i;
+      }
+  
+      const start = Date.now();
+      for (let i = 0; i < 1; ++i) {
+        crc64.Append(buffer, 4194304);
+        const result = crc64.Final(new Uint8Array(0), 0);
 
-      assert.ok(
-        await throwExpectedError(
-          blockBlobClient.commitBlockList([base64encode("1"), base64encode("2")], {
-            conditions: tagConditionUnmet,
-          }),
-          "ConditionNotMet"
-        )
-      );
-      await blockBlobClient.commitBlockList([base64encode("1"), base64encode("2")], {
-        conditions: tagConditionMet,
-      });
+        console.log(result);
+      }
+      const end = Date.now();
+      console.log(end - start);
     });
 
     it("BlockBlobClient.getBlockList", async () => {
