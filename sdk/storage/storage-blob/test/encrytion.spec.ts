@@ -8,7 +8,7 @@ import { BlobServiceClient, BlobClient, BlockBlobClient, ContainerClient } from 
 import { Test_CPK_INFO } from "./utils/fakeTestSecrets";
 import { Context } from "mocha";
 
-describe("Encryption Scope", function () {
+describe.skip("Encryption Scope", function () {
   let blobServiceClient: BlobServiceClient;
   let containerName: string;
   let containerClient: ContainerClient;

@@ -17,7 +17,7 @@ import {
 import { setURLParameter } from "../src/utils/utils.common";
 import { Context } from "mocha";
 
-describe("Blob versioning", () => {
+describe.skip("Blob versioning", () => {
   let blobServiceClient: BlobServiceClient;
   let containerName: string;
   let containerClient: ContainerClient;

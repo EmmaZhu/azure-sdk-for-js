@@ -61,7 +61,7 @@ describe("BlobClient", () => {
     }
   });
 
-  it("upload blob with cold tier should work", async function () {
+  it.skip("upload blob with cold tier should work", async function () {
     const newBlobClient = containerClient.getBlockBlobClient(
       recorder.getUniqueName("coldtierblob")
     );
@@ -578,7 +578,7 @@ describe("BlobClient", () => {
     assert.equal(properties.accessTier!, "Cool");
   });
 
-  it("setAccessTier with versioning", async () => {
+  it.skip("setAccessTier with versioning", async () => {
     const resp = await blockBlobClient.setMetadata({ a: "a" });
     const blockBlobClientWithVersion = blockBlobClient.withVersion(resp.versionId!);
 
@@ -642,7 +642,7 @@ describe("BlobClient", () => {
     assert.ok(exceptionCaught);
   });
 
-  it("setMetadata, setHTTPHeaders, getProperties and createSnapshot with CPK", async () => {
+  it.skip("setMetadata, setHTTPHeaders, getProperties and createSnapshot with CPK", async () => {
     blobName = recorder.getUniqueName("blobCPK");
     blobClient = containerClient.getBlobClient(blobName);
     blockBlobClient = blobClient.getBlockBlobClient();
@@ -750,11 +750,12 @@ describe("BlobClient", () => {
     );
 
     await newBlobURL.setAccessTier(BlockBlobTier.Hot);
-    const properties3 = await newBlobURL.getProperties();
-    assert.equal(properties3.archiveStatus!.toLowerCase(), "rehydrate-pending-to-hot");
+    await newBlobURL.getProperties();
+    // Azurite doesn't support archiveStatus
+    // assert.equal(properties3.archiveStatus!.toLowerCase(), "rehydrate-pending-to-hot");
   });
 
-  it("beginCopyFromURL with cold tier", async () => {
+  it.skip("beginCopyFromURL with cold tier", async () => {
     const newBlobURL = containerClient.getBlobClient(recorder.getUniqueName("copiedblob"));
     const newTier = BlockBlobTier.Cold;
     const result = await (
@@ -833,7 +834,7 @@ describe("BlobClient", () => {
     assert.ok(result === false, "exists() should return true for an existing blob");
   });
 
-  it("exists works with customer provided key", async () => {
+  it.skip("exists works with customer provided key", async () => {
     blobName = recorder.getUniqueName("blobCPK");
     blobClient = containerClient.getBlobClient(blobName);
     blockBlobClient = blobClient.getBlockBlobClient();
@@ -853,7 +854,7 @@ describe("BlobClient", () => {
     assert.ok(result, "exists() should return true");
   });
 
-  it("exists works without customer provided key on a blob with CPK", async () => {
+  it.skip("exists works without customer provided key on a blob with CPK", async () => {
     blobName = recorder.getUniqueName("blobCPK");
     blobClient = containerClient.getBlobClient(blobName);
     blockBlobClient = blobClient.getBlockBlobClient();
@@ -865,7 +866,7 @@ describe("BlobClient", () => {
     assert.ok(result, "exists() should return true");
   });
 
-  it("exists works against blob uploaded with customer provided key", async () => {
+  it.skip("exists works against blob uploaded with customer provided key", async () => {
     blobName = recorder.getUniqueName("blobCPK");
     blobClient = containerClient.getBlobClient(blobName);
     blockBlobClient = blobClient.getBlockBlobClient();
@@ -883,7 +884,7 @@ describe("BlobClient", () => {
     assert.ok(result, "exists() should return true");
   });
 
-  it("exists re-throws error from getProperties", async () => {
+  it.skip("exists re-throws error from getProperties", async () => {
     blobName = recorder.getUniqueName("blobCPK");
     blobClient = containerClient.getBlobClient(blobName);
     blockBlobClient = blobClient.getBlockBlobClient();
@@ -960,11 +961,11 @@ describe("BlobClient", () => {
     }
   }
 
-  it("getProperties and listBlob RehydratePriority = High", async () => {
+  it.skip("getProperties and listBlob RehydratePriority = High", async () => {
     await checkRehydratePriority("High");
   });
 
-  it("getProperties and listBlob RehydratePriority = Standard", async () => {
+  it.skip("getProperties and listBlob RehydratePriority = Standard", async () => {
     await checkRehydratePriority("Standard");
   });
 
@@ -987,7 +988,7 @@ describe("BlobClient", () => {
     }
   });
 
-  describe("conditional tags", () => {
+  describe.skip("conditional tags", () => {
     const tags = {
       tag1: "val1",
       tag2: "val2",

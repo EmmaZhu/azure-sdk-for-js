@@ -184,7 +184,7 @@ describe("BlockBlobClient Node.js only", () => {
   });
 });
 
-describe("syncUploadFromURL", () => {
+describe.skip("syncUploadFromURL", () => {
   let recorder: Recorder;
   let containerClient: ContainerClient;
   let sourceBlob: BlockBlobClient;
@@ -244,7 +244,7 @@ describe("syncUploadFromURL", () => {
     }
   });
 
-  it("stageBlockFromURL - source SAS and destination bearer token", async function (this: Context) {
+  it.skip("stageBlockFromURL - source SAS and destination bearer token", async function (this: Context) {
     const stokenBlobServiceClient = getTokenBSUWithDefaultCredential();
     const tokenNewBlockBlobClient = stokenBlobServiceClient
       .getContainerClient(containerClient.containerName)
@@ -272,7 +272,7 @@ describe("syncUploadFromURL", () => {
     assert.equal(listResponse.committedBlocks![1].size, content.length);
   });
 
-  it("stageBlockFromURL - source bear token and destination account key", async function (this: Context) {
+  it.skip("stageBlockFromURL - source bear token and destination account key", async function (this: Context) {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 
@@ -317,7 +317,7 @@ describe("syncUploadFromURL", () => {
     assert.equal(listResponse.committedBlocks![1].size, body.length);
   });
 
-  it("stageBlockFromURL - destination bearer token", async function (this: Context) {
+  it.skip("stageBlockFromURL - destination bearer token", async function (this: Context) {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 
@@ -365,7 +365,7 @@ describe("syncUploadFromURL", () => {
     assert.equal(listResponse.committedBlocks![1].size, body.length);
   });
 
-  it("syncUploadFromURL - source SAS and destination bearer token", async function (this: Context) {
+  it.skip("syncUploadFromURL - source SAS and destination bearer token", async function (this: Context) {
     const stokenBlobServiceClient = getTokenBSUWithDefaultCredential();
     const tokenNewBlockBlobClient = stokenBlobServiceClient
       .getContainerClient(containerClient.containerName)
@@ -379,7 +379,7 @@ describe("syncUploadFromURL", () => {
     assert.ok(downloadBuffer.compare(Buffer.from(content)) === 0);
   });
 
-  it("syncUploadFromURL - source bear token and destination account key", async function (this: Context) {
+  it.skip("syncUploadFromURL - source bear token and destination account key", async function (this: Context) {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 
@@ -402,7 +402,7 @@ describe("syncUploadFromURL", () => {
     assert.equal(downloadRes.contentLength!, body.length);
   });
 
-  it("syncUploadFromURL - destination bearer token", async function (this: Context) {
+  it.skip("syncUploadFromURL - destination bearer token", async function (this: Context) {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 

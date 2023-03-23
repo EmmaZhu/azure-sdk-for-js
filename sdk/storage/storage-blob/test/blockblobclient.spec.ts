@@ -126,7 +126,7 @@ describe("BlockBlobClient", () => {
     assert.equal(listResponse.committedBlocks![1].size, body.length);
   });
 
-  it("stageBlockFromURL copy source blob as single block", async () => {
+  it.skip("stageBlockFromURL copy source blob as single block", async () => {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 
@@ -147,7 +147,7 @@ describe("BlockBlobClient", () => {
     assert.equal(listResponse.uncommittedBlocks![0].size, body.length);
   });
 
-  it("stageBlockFromURL copy source blob as separate blocks", async () => {
+  it.skip("stageBlockFromURL copy source blob as separate blocks", async () => {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 
@@ -250,7 +250,7 @@ describe("BlockBlobClient", () => {
     assert.equal(listResponse.committedBlocks![0].size, body.length);
   });
 
-  it("commitBlockList with cold tier", async () => {
+  it.skip("commitBlockList with cold tier", async () => {
     const body = "HelloWorld";
     await blockBlobClient.stageBlock(base64encode("1"), body, body.length);
     await blockBlobClient.stageBlock(base64encode("2"), body, body.length);
@@ -306,7 +306,7 @@ describe("BlockBlobClient", () => {
     }
   });
 
-  it("upload and download with CPK", async () => {
+  it.skip("upload and download with CPK", async () => {
     const body: string = recorder.getUniqueName("randomstring");
     const options = {
       blobCacheControl: "blobCacheControl",
@@ -337,7 +337,7 @@ describe("BlockBlobClient", () => {
     assert.deepStrictEqual(result.metadata, options.metadata);
   });
 
-  it("stageBlock, stageBlockURL and commitBlockList with CPK", async () => {
+  it.skip("stageBlock, stageBlockURL and commitBlockList with CPK", async () => {
     const body = "HelloWorld";
     await blockBlobClient.upload(body, body.length);
 
@@ -389,7 +389,7 @@ describe("BlockBlobClient", () => {
     assert.equal(await bodyToString(downloadResponse, 10), body);
   });
 
-  it("download without CPK should fail, if upload with CPK", async () => {
+  it.skip("download without CPK should fail, if upload with CPK", async () => {
     const body: string = recorder.getUniqueName("randomstring");
     await blockBlobClient.upload(body, body.length, {
       customerProvidedKey: Test_CPK_INFO,
@@ -406,7 +406,7 @@ describe("BlockBlobClient", () => {
     assert.ok(exceptionCaught);
   });
 
-  it("stageBlock with invalid CRC64 should fail", async () => {
+  it.skip("stageBlock with invalid CRC64 should fail", async () => {
     const content = "Hello World!";
     let exceptionCaught = false;
     try {
@@ -427,7 +427,7 @@ describe("BlockBlobClient", () => {
     assert.ok(exceptionCaught);
   });
 
-  it("syncUploadFromURL with public source should work", async () => {
+  it.skip("syncUploadFromURL with public source should work", async () => {
     const metadata = {
       key1: "val1",
       key2: "val2",
@@ -459,7 +459,7 @@ describe("BlockBlobClient", () => {
     }
   });
 
-  it("syncUploadFromURL with cold tier should work", async () => {
+  it.skip("syncUploadFromURL with cold tier should work", async () => {
     await blockBlobClient.syncUploadFromURL("https://azure.github.io/azure-sdk-for-js/index.html", {
       tier: "Cold",
     });

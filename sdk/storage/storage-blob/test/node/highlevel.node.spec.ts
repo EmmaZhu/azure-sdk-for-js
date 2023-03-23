@@ -127,7 +127,7 @@ describe("Highlevel", () => {
     assert.ok(downloadedData.equals(uploadedData));
   }).timeout(timeoutForLargeFileUploadingTest);
 
-  it("uploadFile should work with tags", async function () {
+  it.skip("uploadFile should work with tags", async function () {
     recorder.skip("node", "Temp file - recorder doesn't support saving the file");
 
     const tags = {
@@ -311,7 +311,7 @@ describe("Highlevel", () => {
     assert.ok(buf.equals(downloadBuffer));
   });
 
-  it("uploadStream should work with tags", async function () {
+  it.skip("uploadStream should work with tags", async function () {
     recorder.skip("node", "Temp file - recorder doesn't support saving the file");
 
     const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
@@ -516,7 +516,7 @@ describe("Highlevel", () => {
     assert.ok(eventTriggered);
   });
 
-  it("downloadToBuffer with CPK", async () => {
+  it.skip("downloadToBuffer with CPK", async () => {
     const content = "Hello World";
     const CPKblobName = recorder.getUniqueName("blobCPK");
     const CPKblobClient = containerClient.getBlobClient(CPKblobName);

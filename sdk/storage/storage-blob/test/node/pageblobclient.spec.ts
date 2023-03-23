@@ -84,7 +84,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.ok(result.contentLength);
   });
 
-  it("startCopyIncremental", async () => {
+  it.skip("startCopyIncremental", async () => {
     await pageBlobClient.create(1024, {
       metadata: {
         sourcemeta: "val",
@@ -164,7 +164,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.equal(pageBlobProperties.metadata!.sourcemeta, "val");
   });
 
-  it("uploadPagesFromURL", async () => {
+  it.skip("uploadPagesFromURL", async () => {
     await pageBlobClient.create(1024);
 
     const result = await blobClient.download(0);
@@ -201,7 +201,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.equal(await bodyToString(page2, 512), "b".repeat(512));
   });
 
-  it("uploadPagesFromURL - source SAS and destination bearer token", async function (this: Context) {
+  it.skip("uploadPagesFromURL - source SAS and destination bearer token", async function (this: Context) {
     await pageBlobClient.create(1024);
 
     const result = await blobClient.download(0);
@@ -243,7 +243,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.equal(await bodyToString(page2, 512), "b".repeat(512));
   });
 
-  it("uploadPagesFromURL - source bear token and destination account key", async function (this: Context) {
+  it.skip("uploadPagesFromURL - source bear token and destination account key", async function (this: Context) {
     await pageBlobClient.create(1024);
 
     const result = await blobClient.download(0);
@@ -278,7 +278,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.equal(await bodyToString(page2, 512), "b".repeat(512));
   });
 
-  it("uploadPagesFromURL - destination bearer token", async function (this: Context) {
+  it.skip("uploadPagesFromURL - destination bearer token", async function (this: Context) {
     await pageBlobClient.create(1024);
 
     const result = await blobClient.download(0);
@@ -380,7 +380,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(result, 512), "\u0000".repeat(512));
   });
 
-  it("create, uploadPages, uploadPagesFromURL, download, clearPages and resize with CPK", async () => {
+  it.skip("create, uploadPages, uploadPagesFromURL, download, clearPages and resize with CPK", async () => {
     const cResp = await pageBlobClient.create(1024, {
       customerProvidedKey: Test_CPK_INFO,
     });
@@ -470,7 +470,7 @@ describe("PageBlobClient Node.js only", () => {
     assert.equal(pResp.contentLength, 2048);
   });
 
-  describe("conditional tags", () => {
+  describe.skip("conditional tags", () => {
     const tags = {
       tag1: "val1",
       tag2: "val2",

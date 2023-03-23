@@ -66,10 +66,6 @@ describe("BlobBatch", () => {
   });
 
   it("submitBatch should work for batch delete", async () => {
-    recorder.skip(
-      undefined,
-      "UUID is randomly generated within the SDK and used in the HTTP request and cannot be preserved."
-    );
     // Upload blobs.
     for (let i = 0; i < blockBlobCount; i++) {
       await blockBlobClients[i].upload(content, content.length);

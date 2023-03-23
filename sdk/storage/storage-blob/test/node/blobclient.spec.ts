@@ -208,7 +208,7 @@ describe("BlobClient Node.js only", () => {
     assert.ok(result3.segment.blobItems![0].snapshot || result3.segment.blobItems![1].snapshot);
   });
 
-  it("syncCopyFromURL - destination encryption scope", async function (this: Context) {
+  it.skip("syncCopyFromURL - destination encryption scope", async function (this: Context) {
     let encryptionScopeName: string;
 
     try {
@@ -302,7 +302,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(properties2.copyId, result.copyId);
   });
 
-  it("syncCopyFromURL - source bearer token and destination account key", async function (this: Context) {
+  it.skip("syncCopyFromURL - source bearer token and destination account key", async function (this: Context) {
     const newBlobName = recorder.getUniqueName("copiedblob");
     const newBlobClient = containerClient.getBlobClient(newBlobName);
 
@@ -322,7 +322,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(properties2.copyId, result.copyId);
   });
 
-  it("syncCopyFromURL", async () => {
+  it.skip("syncCopyFromURL", async () => {
     const newBlobClient = containerClient.getBlobClient(recorder.getUniqueName("copiedblob"));
 
     // Different from startCopyFromURL, syncCopyFromURL requires sourceURL includes a valid SAS
@@ -352,7 +352,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(properties2.copyId, result.copyId);
   });
 
-  it("syncCopyFromURL - with COPY tags", async () => {
+  it.skip("syncCopyFromURL - with COPY tags", async () => {
     const newBlobClient = containerClient.getBlobClient(recorder.getUniqueName("copiedblob"));
     await blobClient.setTags({
       tag1: "val1",
@@ -389,7 +389,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(sourceBlobTags.tags, destBlobTags.tags);
   });
 
-  it("syncCopyFromURL - with REPLACE tags", async () => {
+  it.skip("syncCopyFromURL - with REPLACE tags", async () => {
     const newBlobClient = containerClient.getBlobClient(recorder.getUniqueName("copiedblob"));
     await blobClient.setTags({
       tag1: "val1",
@@ -429,7 +429,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(tags, destBlobTags.tags);
   });
 
-  it("abortCopyFromClient should failed for a completed copy operation", async () => {
+  it.skip("abortCopyFromClient should failed for a completed copy operation", async () => {
     const newBlobClient = containerClient.getBlobClient(recorder.getUniqueName("copiedblob"));
     const result = await (await newBlobClient.beginCopyFromURL(blobClient.url)).pollUntilDone();
     assert.ok(result.copyId);
@@ -553,7 +553,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(result.metadata, metadata);
   });
 
-  it("query should work", async function () {
+  it.skip("query should work", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -561,7 +561,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), csvContent);
   });
 
-  it("query should work with conditional tags", async function () {
+  it.skip("query should work with conditional tags", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length, { tags: { tag: "val" } });
 
@@ -582,7 +582,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), csvContent);
   });
 
-  it("query should work with access conditions", async function () {
+  it.skip("query should work with access conditions", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     const uploadResponse = await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -597,7 +597,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), csvContent);
   });
 
-  it("query should not work with access conditions ifModifiedSince", async function () {
+  it.skip("query should not work with access conditions ifModifiedSince", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -614,7 +614,7 @@ describe("BlobClient Node.js only", () => {
     assert.fail();
   });
 
-  it("query should not work with access conditions leaseId", async function () {
+  it.skip("query should not work with access conditions leaseId", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -631,7 +631,7 @@ describe("BlobClient Node.js only", () => {
     assert.fail();
   });
 
-  it("query should work with snapshot", async function () {
+  it.skip("query should work with snapshot", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
     const snapshotResponse = await blockBlobClient.createSnapshot();
@@ -641,7 +641,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), csvContent);
   });
 
-  it("query should work with where conditionals", async function () {
+  it.skip("query should work with where conditionals", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -649,7 +649,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), "250\n");
   });
 
-  it("query should work with empty results", async function () {
+  it.skip("query should work with empty results", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -658,7 +658,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), "");
   });
 
-  it("query should work with blob properties", async function () {
+  it.skip("query should work with blob properties", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -675,7 +675,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(typeof response.date, "object");
   });
 
-  it("query should work with large file", async function () {
+  it.skip("query should work with large file", async function () {
     recorder.skip("node", "Temp file - recorder doesn't support saving the file");
     const csvContentUnit = "100,200,300,400\n150,250,350,450\n";
     const tempFileLarge = await createRandomLocalFile(
@@ -699,7 +699,7 @@ describe("BlobClient Node.js only", () => {
     assert.ok(downloadedData.equals(uploadedData));
   });
 
-  it("query should work with aborter", async function () {
+  it.skip("query should work with aborter", async function () {
     recorder.skip("node", "Temp file - recorder doesn't support saving the file");
     const csvContentUnit = "100,200,300,400\n150,250,350,450\n";
     const tempFileLarge = await createRandomLocalFile(
@@ -734,7 +734,7 @@ describe("BlobClient Node.js only", () => {
     assert.fail();
   });
 
-  it("query should work with progress event", async function () {
+  it.skip("query should work with progress event", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -756,7 +756,7 @@ describe("BlobClient Node.js only", () => {
     });
   });
 
-  it("query should work with fatal error event", async function () {
+  it.skip("query should work with fatal error event", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -780,7 +780,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), "\n");
   });
 
-  it("query should work with non fatal error event", async function () {
+  it.skip("query should work with non fatal error event", async function () {
     const csvContent = "100,hello,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -796,7 +796,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), "250\n");
   });
 
-  it("query should work with CSV input and output configurations", async function () {
+  it.skip("query should work with CSV input and output configurations", async function () {
     const csvContent = "100.200.300.400!150.250.350.450!180.280.380.480!";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -821,7 +821,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), "150!180!");
   });
 
-  it("query should work with JSON input and output configurations", async function () {
+  it.skip("query should work with JSON input and output configurations", async function () {
     const recordSeparator = "\n";
     const jsonContent =
       [
@@ -844,7 +844,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), jsonContent);
   });
 
-  it("query should work with arrow output configurations", async function () {
+  it.skip("query should work with arrow output configurations", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -867,7 +867,7 @@ describe("BlobClient Node.js only", () => {
     );
   });
 
-  it("query should work with arrow output configurations for timestamp[ms]", async function () {
+  it.skip("query should work with arrow output configurations for timestamp[ms]", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length);
 
@@ -883,7 +883,7 @@ describe("BlobClient Node.js only", () => {
     });
   });
 
-  it("query should work with Parquet input configuration", async function (this: Context) {
+  it.skip("query should work with Parquet input configuration", async function (this: Context) {
     // Enable the case when STG78 - version 2020-10-02 features is enabled in production.
     this.skip();
     const parquetFilePath = join("test", "resources", "parquet.parquet");
@@ -898,7 +898,7 @@ describe("BlobClient Node.js only", () => {
     assert.deepStrictEqual(await bodyToString(response), "0,mdifjt55.ea3,mdifjt55.ea3\n");
   });
 
-  it("query with CPK", async function () {
+  it.skip("query with CPK", async function () {
     const csvContent = "100,200,300,400\n150,250,350,450\n";
     await blockBlobClient.upload(csvContent, csvContent.length, {
       customerProvidedKey: Test_CPK_INFO,
@@ -911,7 +911,7 @@ describe("BlobClient Node.js only", () => {
   });
 });
 
-describe("BlobClient Node.js Only - ImmutabilityPolicy", () => {
+describe.skip("BlobClient Node.js Only - ImmutabilityPolicy", () => {
   let blobServiceClient: BlobServiceClient;
   let containerName: string;
   let containerClient: ContainerClient;

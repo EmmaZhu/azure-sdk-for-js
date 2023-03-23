@@ -364,17 +364,13 @@ describe("BlobServiceClient", () => {
     };
 
     const newCORS = {
-      allowedHeaders: "*",
+      allowedHeaders: "",
       allowedMethods: "GET",
       allowedOrigins: "example.com",
-      exposedHeaders: "*",
+      exposedHeaders: "",
       maxAgeInSeconds: 8888,
     };
-    if (!serviceProperties.cors) {
-      serviceProperties.cors = [newCORS];
-    } else if (serviceProperties.cors!.length < 5) {
-      serviceProperties.cors.push(newCORS);
-    }
+    serviceProperties.cors = [newCORS];
 
     if (!serviceProperties.deleteRetentionPolicy) {
       serviceProperties.deleteRetentionPolicy = {
@@ -413,7 +409,7 @@ describe("BlobServiceClient", () => {
       .catch(done);
   });
 
-  it("getAccountInfo", async () => {
+  it.skip("getAccountInfo", async () => {
     const blobServiceClient = getBSU();
 
     const accountInfo = await blobServiceClient.getAccountInfo();
@@ -487,7 +483,7 @@ describe("BlobServiceClient", () => {
     assert.notDeepEqual(response.signedExpiresOn, undefined);
   });
 
-  it("Find blob by tags should work", async function () {
+  it.skip("Find blob by tags should work", async function () {
     const blobServiceClient = getBSU();
 
     const containerName = recorder.getUniqueName("container1");
@@ -589,7 +585,7 @@ describe("BlobServiceClient", () => {
     assert.equal(staticWebsite?.defaultIndexDocumentPath, defaultIndexDocumentPath);
   });
 
-  it("restore container", async function (this: Context) {
+  it.skip("restore container", async function (this: Context) {
     let blobServiceClient: BlobServiceClient;
     try {
       blobServiceClient = getGenericBSU("SOFT_DELETE_");

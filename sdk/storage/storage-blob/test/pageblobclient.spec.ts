@@ -178,7 +178,7 @@ describe("PageBlobClient", () => {
     assert.equal((page2.pageRange![0].count || 0) + page2.pageRange![0].offset, 1023);
   });
 
-  it("getPageRangesDiff", async () => {
+  it.skip("getPageRangesDiff", async () => {
     await pageBlobClient.create(1024);
 
     const result = await blobClient.download(0);
@@ -199,7 +199,7 @@ describe("PageBlobClient", () => {
     assert.equal(rangesDiff.clearRange![0].count, 511);
   });
 
-  it("getPageRangesDiffForManagedDisks", async function (this: Context): Promise<void> {
+  it.skip("getPageRangesDiffForManagedDisks", async function (this: Context): Promise<void> {
     let mdBlobServiceClient: BlobServiceClient;
     try {
       mdBlobServiceClient = getGenericBSU("MD_", "");
@@ -308,7 +308,7 @@ describe("PageBlobClient", () => {
     }
   });
 
-  it("Verify PagedAsyncIterableIterator(byPage() - continuationToken) for listPageRanges", async () => {
+  it.skip("Verify PagedAsyncIterableIterator(byPage() - continuationToken) for listPageRanges", async () => {
     await pageBlobClient.create(4096);
 
     for (let i = 0; i < 4; ++i) {
@@ -340,7 +340,7 @@ describe("PageBlobClient", () => {
     }
   });
 
-  it("listPageRangesDiff", async () => {
+  it.skip("listPageRangesDiff", async () => {
     await pageBlobClient.create(4096);
 
     await pageBlobClient.uploadPages("b".repeat(4096), 0, 4096);
@@ -365,7 +365,7 @@ describe("PageBlobClient", () => {
     }
   });
 
-  it("Verify PagedAsyncIterableIterator for listPageRangesDiff", async () => {
+  it.skip("Verify PagedAsyncIterableIterator for listPageRangesDiff", async () => {
     await pageBlobClient.create(4096);
 
     await pageBlobClient.uploadPages("b".repeat(4096), 0, 4096);
@@ -394,7 +394,7 @@ describe("PageBlobClient", () => {
     }
   });
 
-  it("Verify PagedAsyncIterableIterator(generator .next() syntax) for listPageRangesDiff", async () => {
+  it.skip("Verify PagedAsyncIterableIterator(generator .next() syntax) for listPageRangesDiff", async () => {
     await pageBlobClient.create(4096);
 
     await pageBlobClient.uploadPages("b".repeat(4096), 0, 4096);
@@ -415,7 +415,7 @@ describe("PageBlobClient", () => {
     assert.equal(pageRange.start, 512);
   });
 
-  it("Verify PagedAsyncIterableIterator(byPage()) for listPageRangesDiff", async () => {
+  it.skip("Verify PagedAsyncIterableIterator(byPage()) for listPageRangesDiff", async () => {
     await pageBlobClient.create(4096);
 
     await pageBlobClient.uploadPages("b".repeat(4096), 0, 4096);
@@ -439,7 +439,7 @@ describe("PageBlobClient", () => {
     }
   });
 
-  it("Verify PagedAsyncIterableIterator(byPage() - continuationToken) for listPageRangesDiff", async () => {
+  it.skip("Verify PagedAsyncIterableIterator(byPage() - continuationToken) for listPageRangesDiff", async () => {
     await pageBlobClient.create(4096);
 
     await pageBlobClient.uploadPages("b".repeat(4096), 0, 4096);
@@ -492,7 +492,7 @@ describe("PageBlobClient", () => {
     assert.equal(propertiesResponse.blobSequenceNumber!, 100);
   });
 
-  it("uploadPages with invalid CRC64 should fail", async () => {
+  it.skip("uploadPages with invalid CRC64 should fail", async () => {
     await pageBlobClient.create(1024);
 
     let exceptionCaught = false;

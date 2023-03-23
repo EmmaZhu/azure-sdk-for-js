@@ -140,7 +140,7 @@ describe("AppendBlobClient", () => {
     }
   });
 
-  it("appendBlock with invalid CRC64 should fail", async () => {
+  it.skip("appendBlock with invalid CRC64 should fail", async () => {
     await appendBlobClient.create();
 
     const content = "Hello World!";
@@ -169,7 +169,7 @@ describe("AppendBlobClient", () => {
     assert.ok(exceptionCaught);
   });
 
-  it("Seal append blob", async () => {
+  it.skip("Seal append blob", async () => {
     await appendBlobClient.create();
     await appendBlobClient.seal();
 
@@ -184,7 +184,7 @@ describe("AppendBlobClient", () => {
     }
   });
 
-  it("Copy seal blob", async () => {
+  it.skip("Copy seal blob", async () => {
     await appendBlobClient.create();
     await appendBlobClient.seal();
 

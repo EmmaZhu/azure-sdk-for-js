@@ -67,10 +67,7 @@ export function getGenericBSU(
   accountNameSuffix: string = "",
   pipelineOptions: StoragePipelineOptions = {}
 ): BlobServiceClient {
-  if (
-    env.STORAGE_CONNECTION_STRING &&
-    env.STORAGE_CONNECTION_STRING.startsWith("UseDevelopmentStorage=true")
-  ) {
+  if (env.STORAGE_CONNECTION_STRING) {
     return BlobServiceClient.fromConnectionString(getConnectionStringFromEnvironment());
   } else {
     const credential = getGenericCredential(accountType) as StorageSharedKeyCredential;
@@ -111,7 +108,7 @@ export function getTokenBSU(): BlobServiceClient {
     // Enable logger when debugging
     // logger: new ConsoleHttpPipelineLogger(HttpPipelineLogLevel.INFO)
   });
-  const blobPrimaryURL = `https://${accountName}.blob.core.windows.net/`;
+  const blobPrimaryURL = `https://127.0.0.1:10000/devstoreaccount1/`;
   return new BlobServiceClient(blobPrimaryURL, pipeline);
 }
 
@@ -120,18 +117,10 @@ export function getTokenBSUWithDefaultCredential(
   accountType: string = "",
   accountNameSuffix: string = ""
 ): BlobServiceClient {
-  const accountNameEnvVar = `${accountType}ACCOUNT_NAME`;
-  const accountName = process.env[accountNameEnvVar];
-  if (!accountName || accountName === "") {
-    throw new Error(`${accountNameEnvVar} environment variables not specified.`);
-  }
-
-  const credential = new DefaultAzureCredential();
-  const pipeline = newPipeline(credential, {
-    ...pipelineOptions,
-  });
-  const blobPrimaryURL = `https://${accountName}${accountNameSuffix}.blob.core.windows.net/`;
-  return new BlobServiceClient(blobPrimaryURL, pipeline);
+  pipelineOptions;
+  accountNameSuffix;
+  accountType;
+  return getTokenBSU();
 }
 
 export async function getStorageAccessTokenWithDefaultCredential(): Promise<AccessToken | null> {
