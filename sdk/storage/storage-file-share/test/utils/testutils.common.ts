@@ -42,6 +42,9 @@ export const recorderEnvSetup: RecorderStartOptions = {
     // Comment following line to skip user delegation key/SAS related cases in record and play
     // which depends on this environment variable
     ACCOUNT_TOKEN: `${mockAccountKey}`,
+    AZURE_CLIENT_ID: `${mockAccountKey}`,
+    AZURE_TENANT_ID: `${mockAccountKey}`,
+    AZURE_CLIENT_SECRET: `${mockAccountKey}`,
     SOFT_DELETE_ACCOUNT_NAME: `${mockSDAccountName}`,
     SOFT_DELETE_ACCOUNT_KEY: `${mockAccountKey}`,
     SOFT_DELETE_ACCOUNT_SAS: `${mockSas}`,
@@ -121,4 +124,15 @@ export class SimpleTokenCredential implements TokenCredential {
       expiresOnTimestamp: this.expiresOn.getTime(),
     };
   }
+}
+
+/**
+ * Sleep for seconds.
+ *
+ * @param seconds -
+ */
+export function sleep(seconds: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, seconds * 1000);
+  });
 }

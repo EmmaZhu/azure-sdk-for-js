@@ -5,6 +5,7 @@ import { assert } from "chai";
 import { Buffer } from "buffer";
 import * as fs from "fs";
 import { Context } from "mocha";
+import { DefaultAzureCredential } from "@azure/identity";
 import * as path from "path";
 import { Duplex } from "stream";
 import * as zlib from "zlib";
@@ -14,6 +15,7 @@ import { isLiveMode, Recorder } from "@azure-tools/test-recorder";
 import {
   FileSASPermissions,
   generateFileSASQueryParameters,
+  getFileServiceAccountAudience,
   newPipeline,
   ShareClient,
   ShareDirectoryClient,
@@ -25,6 +27,7 @@ import {
   bodyToString,
   configureStorageClient,
   createRandomLocalFile,
+  getAccountName,
   getBlobServiceClient,
   getBSU,
   getTokenCredential,
@@ -80,6 +83,49 @@ describe("FileClient Node.js only", () => {
       await shareClient.delete();
     }
     await recorder.stop();
+  });
+
+  it("Default audience should work", async () => {
+    await fileClient.create(1024);
+    const fileClientWithOAuthToken = new ShareFileClient(
+      fileClient.url,
+      new DefaultAzureCredential(),
+      { fileRequestIntent: "backup" }
+    );
+    const exist = await fileClientWithOAuthToken.exists();
+    assert.equal(exist, true);
+  });
+
+  it("Customized audience should work", async () => {
+    await fileClient.create(1024);
+    const fileClientWithOAuthToken = new ShareFileClient(
+      fileClient.url,
+      new DefaultAzureCredential(),
+      {
+        audience: getFileServiceAccountAudience(getAccountName()),
+        fileRequestIntent: "backup",
+      }
+    );
+    const exist = await fileClientWithOAuthToken.exists();
+    assert.equal(exist, true);
+  });
+
+  it("Bad audience should fail", async () => {
+    await fileClient.create(1024);
+    const fileClientWithOAuthToken = new ShareFileClient(
+      fileClient.url,
+      new DefaultAzureCredential(),
+      {
+        audience: "https://badaudience.file.core.windows.net/.default",
+        fileRequestIntent: "backup",
+      }
+    );
+    try {
+      await fileClientWithOAuthToken.exists();
+      assert.fail("Should fail with 403");
+    } catch (err) {
+      assert.strictEqual((err as any).statusCode, 403);
+    }
   });
 
   it("uploadData - large Buffer as data", async function () {
@@ -247,6 +293,47 @@ describe("FileClient Node.js only", () => {
 
     await fileURL2.uploadRangeFromURL(`${fileClient.url}?${sas}`, 0, 0, 512);
     await fileURL2.uploadRangeFromURL(`${fileClient.url}?${sas}`, 512, 512, 512);
+
+    const range1 = await fileURL2.download(0, 512);
+    const range2 = await fileURL2.download(512, 512);
+
+    assert.equal(await bodyToString(range1, 512), "a".repeat(512));
+    assert.equal(await bodyToString(range2, 512), "b".repeat(512));
+  });
+
+  it.skip("uploadRangeFromURL - destination OAuth", async () => {
+    await fileClient.create(1024);
+
+    const fileContent = "a".repeat(512) + "b".repeat(512);
+    await fileClient.uploadRange(fileContent, 0, fileContent.length);
+
+    // Get a SAS for fileURL
+    const factories = (fileClient as any).pipeline.factories;
+    const credential = factories[factories.length - 1] as StorageSharedKeyCredential;
+    const expiresOn = new Date(recorder.variable("now", new Date().toISOString()));
+    expiresOn.setDate(expiresOn.getDate() + 1);
+    const sas = generateFileSASQueryParameters(
+      {
+        expiresOn,
+        shareName,
+        filePath: `${dirName}/${fileName}`,
+        permissions: FileSASPermissions.parse("r"),
+      },
+      credential
+    );
+
+    const fileName2 = recorder.variable("file2", getUniqueName("file2"));
+    const fileURL2 = dirClient.getFileClient(fileName2);
+    const fileClientWithOAuthToken = new ShareFileClient(
+      fileURL2.url,
+      new DefaultAzureCredential(),
+      { fileRequestIntent: "backup" }
+    );
+
+    await fileClientWithOAuthToken.create(1024);
+
+    await fileClientWithOAuthToken.uploadRangeFromURL(`${fileClient.url}?${sas}`, 0, 0, 512);
+    await fileClientWithOAuthToken.uploadRangeFromURL(`${fileClient.url}?${sas}`, 512, 512, 512);
 
     const range1 = await fileURL2.download(0, 512);
     const range2 = await fileURL2.download(512, 512);

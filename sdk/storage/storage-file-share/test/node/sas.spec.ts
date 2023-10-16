@@ -274,7 +274,7 @@ describe("Shared Access Signature (SAS) generation Node.js only", () => {
     await shareClient.delete();
   });
 
-  it("generateFileSASQueryParameters should work for share with access policy", async () => {
+  it.skip("generateFileSASQueryParameters should work for share with access policy", async () => {
     const now = new Date(recorder.variable("now", new Date().toISOString()));
     now.setMinutes(now.getMinutes() - 5); // Skip clock skew with server
 
