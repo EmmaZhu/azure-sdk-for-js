@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 import { QueueSASPermissions } from "./QueueSASPermissions.js";
-import type { StorageSharedKeyCredential } from "@azure/storage-common";
+import { StorageSharedKeyCredential } from "@azure/storage-common";
 import type { SasIPRange } from "./SasIPRange.js";
 import { ipRangeToString } from "./SasIPRange.js";
 import type { SASProtocol } from "./SASQueryParameters.js";
 import { SASQueryParameters } from "./SASQueryParameters.js";
 import { SERVICE_VERSION } from "./utils/constants.js";
 import { truncatedISO8061Date } from "./utils/utils.common.js";
+import { UserDelegationKey } from "./generatedModels.js";
 
 /**
  * ONLY AVAILABLE IN NODE.JS RUNTIME.
@@ -79,7 +80,19 @@ export interface QueueSASSignatureValues {
  */
 export function generateQueueSASQueryParameters(
   queueSASSignatureValues: QueueSASSignatureValues,
+  userDelegationKey: UserDelegationKey,
+  accountName: string,
+): SASQueryParameters;
+
+export function generateQueueSASQueryParameters(
+  queueSASSignatureValues: QueueSASSignatureValues,
   sharedKeyCredential: StorageSharedKeyCredential,
+): SASQueryParameters;
+
+export function generateQueueSASQueryParameters(
+  queueSASSignatureValues: QueueSASSignatureValues,
+  sharedKeyCredentialOrUserDelegationKey: StorageSharedKeyCredential | UserDelegationKey,
+  accountName?: string,
 ): SASQueryParameters {
   return generateQueueSASQueryParametersInternal(queueSASSignatureValues, sharedKeyCredential)
     .sasQueryParameters;
@@ -87,8 +100,25 @@ export function generateQueueSASQueryParameters(
 
 export function generateQueueSASQueryParametersInternal(
   queueSASSignatureValues: QueueSASSignatureValues,
-  sharedKeyCredential: StorageSharedKeyCredential,
+  sharedKeyCredentialOrUserDelegationKey: StorageSharedKeyCredential | UserDelegationKey,
+  accountName?: string,
 ): { sasQueryParameters: SASQueryParameters; stringToSign: string } {
+  
+  const version = queueSASSignatureValues.version ? queueSASSignatureValues.version : SERVICE_VERSION;
+
+  const sharedKeyCredential =
+    sharedKeyCredentialOrUserDelegationKey instanceof StorageSharedKeyCredential
+      ? sharedKeyCredentialOrUserDelegationKey
+      : undefined;
+  let userDelegationKeyCredential: UserDelegationKeyCredential | undefined;
+
+  if (sharedKeyCredential === undefined && accountName !== undefined) {
+    userDelegationKeyCredential = new UserDelegationKeyCredential(
+      accountName,
+      sharedKeyCredentialOrUserDelegationKey as UserDelegationKey,
+    );
+  }
+
   if (
     !queueSASSignatureValues.identifier &&
     !(queueSASSignatureValues.permissions && queueSASSignatureValues.expiresOn)

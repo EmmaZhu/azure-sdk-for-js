@@ -182,7 +182,7 @@ For the complete API surface, see the corresponding -node.api.md file.
      generateSasStringToSign(expiresOn?: Date, permissions?: AccountSASPermissions, resourceTypes?: string, options?: ServiceGenerateAccountSasUrlOptions): string;
      getProperties(options?: ServiceGetPropertiesOptions): Promise<ServiceGetPropertiesResponse>;
      getQueueClient(queueName: string): QueueClient;
-@@ -611,15 +532,8 @@
+@@ -612,15 +533,8 @@
  
  // @public
  export type ReceivedMessageItem = DequeuedMessageItem;
@@ -198,7 +198,7 @@ For the complete API surface, see the corresponding -node.api.md file.
  export interface ResponseLike {
      _response: HttpResponse;
  }
-@@ -654,31 +568,8 @@
+@@ -655,31 +569,8 @@
      start: string;
  }
  
@@ -230,7 +230,7 @@ For the complete API surface, see the corresponding -node.api.md file.
      httpClient?: RequestPolicy;
      requestPolicyFactories?: RequestPolicyFactory[] | ((defaultRequestPolicyFactories: RequestPolicyFactory[]) => void | RequestPolicyFactory[]);
  }
-@@ -777,11 +668,8 @@
+@@ -797,11 +688,8 @@
  
  export { StorageBrowserPolicyFactory }
  
@@ -242,7 +242,7 @@ For the complete API surface, see the corresponding -node.api.md file.
      audience?: string;
      httpClient?: RequestPolicy;
      keepAliveOptions?: KeepAliveOptions;
-@@ -789,27 +677,10 @@
+@@ -809,25 +697,10 @@
      retryOptions?: StorageRetryOptions;
      userAgentOptions?: UserAgentPolicyOptions;
  }
@@ -264,6 +264,15 @@ For the complete API surface, see the corresponding -node.api.md file.
 -
 -export { StorageSharedKeyCredentialPolicy }
 -
+ // @public
+ export interface UserDelegationKey {
+     signedExpiresOn: Date;
+     signedObjectId: string;
+@@ -848,10 +721,8 @@
+     signedVersion: string;
+     value: string;
+ }
+ 
 -export { WebResource }
 -
  // @public

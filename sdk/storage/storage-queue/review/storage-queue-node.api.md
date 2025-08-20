@@ -550,6 +550,7 @@ export class QueueServiceClient extends StorageClient {
     getProperties(options?: ServiceGetPropertiesOptions): Promise<ServiceGetPropertiesResponse>;
     getQueueClient(queueName: string): QueueClient;
     getStatistics(options?: ServiceGetStatisticsOptions): Promise<ServiceGetStatisticsResponse>;
+    getUserDelegationKey(startsOn: Date, expiresOn: Date, options?: ServiceGetUserDelegationKeyOptions): Promise<ServiceGetUserDelegationKeyResponse>;
     listQueues(options?: ServiceListQueuesOptions): PagedAsyncIterableIterator<QueueItem, ServiceListQueuesSegmentResponse>;
     setProperties(properties: QueueServiceProperties, options?: ServiceGetPropertiesOptions): Promise<ServiceSetPropertiesResponse>;
 }
@@ -725,6 +726,25 @@ export interface ServiceGetStatisticsOptions extends CommonOptions {
 export type ServiceGetStatisticsResponse = WithResponse<ServiceGetStatisticsHeaders & QueueServiceStatistics, ServiceGetStatisticsHeaders, QueueServiceStatistics>;
 
 // @public
+export interface ServiceGetUserDelegationKeyHeaders {
+    clientRequestId?: string;
+    date?: Date;
+    requestId?: string;
+    version?: string;
+}
+
+// @public
+export interface ServiceGetUserDelegationKeyOptions extends CommonOptions {
+    abortSignal?: AbortSignalLike;
+}
+
+// @public
+export type ServiceGetUserDelegationKeyResponse = WithResponse<UserDelegationKey & ServiceGetUserDelegationKeyHeaders, ServiceGetUserDelegationKeyHeaders, UserDelegationKeyModel>;
+
+// @public
+export type ServiceGetUserDelegationKeyResponseModel = ServiceGetUserDelegationKeyHeaders & UserDelegationKeyModel;
+
+// @public
 export interface ServiceListQueuesOptions extends CommonOptions {
     abortSignal?: AbortSignalLike;
     includeMetadata?: boolean;
@@ -806,6 +826,28 @@ export { StorageRetryPolicyType }
 export { StorageSharedKeyCredential }
 
 export { StorageSharedKeyCredentialPolicy }
+
+// @public
+export interface UserDelegationKey {
+    signedExpiresOn: Date;
+    signedObjectId: string;
+    signedService: string;
+    signedStartsOn: Date;
+    signedTenantId: string;
+    signedVersion: string;
+    value: string;
+}
+
+// @public
+export interface UserDelegationKeyModel {
+    signedExpiry: Date;
+    signedOid: string;
+    signedService: string;
+    signedStart: Date;
+    signedTid: string;
+    signedVersion: string;
+    value: string;
+}
 
 export { WebResource }
 
